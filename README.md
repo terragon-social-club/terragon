@@ -1,5 +1,5 @@
 # Terragon
-[![Build Status](https://jenkins.terragon.us/jenkins/job/Terragon%20Angular%20App/1/badge/icon)](https://jenkins.terragon.us/jenkins/job/Terragon%20Angular%20App/1/)
+[![Build Status](https://jenkins.terragon.us/jenkins/job/Terragon%20Angular%20App/1/badge/icon)]
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.1.
 
