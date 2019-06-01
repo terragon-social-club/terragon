@@ -1,5 +1,5 @@
 # Terragon
-[![Build Status](https://jenkins.terragon.us/jenkins/buildStatus/icon?job=Terragon+Angular+App&build=1)](https://jenkins.terragon.us/jenkins/job/Terragon%20Angular%20App/1/)
+[![Build Status](https://jenkins.terragon.us/jenkins/buildStatus/icon?job=Terragon+Angular+App&build=lastBuild)](https://jenkins.terragon.us/jenkins/job/Terragon%20Angular%20App/lastBuild/)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.1.
 
