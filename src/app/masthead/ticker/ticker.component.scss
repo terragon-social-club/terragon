@@ -1,0 +1,51 @@
+div {
+  font-family: 'Inconsolata', monospace;
+  overflow: hidden;
+  background: transparent;
+  width: calc(100% - 200px);
+  transition: all .5s;
+  white-space: nowrap;
+  position: absolute;
+  left: 200px;
+  top: 15px;
+  transition: width .25s;
+  color: rgba(0, 0, 0, .8);
+  font-size: 11pt;
+  font-weight: 500;
+  padding: 0 0 5px 0;
+  
+  &.cancelOut {
+    width: 1px;
+
+    span.marker {
+      opacity: 1;
+    }
+    
+  }
+
+  &.repainting {
+    span.marker {
+      opacity: 1;
+    }
+    
+  }
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  span.marker {
+    display: inline-block;
+    height: 19px;
+    width: 9px;
+    background: #000;
+    content: "";
+    top: 5px;
+    left: 4px;
+    position: relative;
+    opacity: 0;
+    transition: opacity .25s;
+  }
+  
+}

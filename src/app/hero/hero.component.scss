@@ -1,0 +1,43 @@
+$flushWithLogoMarginLeft: 170px;
+$flushWithLogoPaddingTop: 6px;
+
+section {
+  font-family: 'Varela Round', sans-serif;
+  font-size: 13pt;
+  position: relative;
+  margin: -194px 0 0 $flushWithLogoMarginLeft + 40;
+  padding: $flushWithLogoPaddingTop + 20 $flushWithLogoMarginLeft + 20 0 0;
+  max-width: 780px;
+  line-height: 22pt;
+  opacity: .75;
+
+  p {
+    margin: 0;
+    padding: 0 0 20px 0;
+  }
+
+  div.mk-sig {
+    height: 100px;
+
+    svg {
+      position: relative;
+      top: -12px;
+      height: 100%;
+    }
+    
+  }
+
+  .close-me {
+    position: absolute;
+    right: 75px;
+    top: 38px;
+    height: 75px;
+    
+    svg {
+      position: relative;
+      height: 100%;
+    }
+    
+  }
+  
+}

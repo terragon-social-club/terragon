@@ -3,10 +3,18 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { MastheadComponent } from './masthead/masthead.component';
+import { TickerComponent } from './masthead/ticker/ticker.component';
+import { WatermarkComponent } from './watermark/watermark.component';
+import { HeroComponent } from './hero/hero.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MastheadComponent,
+    TickerComponent,
+    WatermarkComponent,
+    HeroComponent
   ],
   imports: [
     BrowserModule,

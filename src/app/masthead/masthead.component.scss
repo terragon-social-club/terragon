@@ -1,0 +1,89 @@
+header {
+  padding: 0 0 0 20px;
+
+  .members {
+    font-family: 'Varela Round', sans-serif;
+    background: #F3FFC6;
+    color: #49475B;
+    display: inline-block;
+    padding: 5px 8px 5px 8px;
+    position: absolute;
+    top: 0;
+    right: 15px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    text-decoration: none;
+  }
+  
+  #logo {
+    display: block;
+    height: 38px;
+    overflow: hidden;
+    text-decoration: none;
+    background: #F3FFC6;
+    width: 120px;
+    padding: 4px 15px 15px 15px;
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+    transition: all .2s;
+
+    span.terragon {
+      opacity: .8;
+    }
+
+    span, svg {
+      transition: all .2s;
+    }
+    
+    span.social-club, svg {
+      opacity: 0;
+    }
+    
+    &:hover, &.logoOpen {
+      height: 175px;
+
+      span.terragon {
+        opacity: .8;
+      }
+      
+      span.social-club, svg {
+        opacity: .8;
+      }
+      
+    }
+
+    &:hover {
+      span, svg {
+        opacity: .9;
+      }
+    }
+
+    span {
+      font-family: 'Lily Script One', cursive;
+      display: block;
+      color: #49475B;
+      
+
+      &.terragon {
+        font-size: 24pt;
+        margin: 0 0 -5px 0;
+      }
+      
+      &.social-club {
+        margin: -10px 0 0 0;
+        font-size: 19pt;
+      }
+      
+    }
+    
+    svg {
+      display: block;
+      fill: #49475B;
+      width: 120px;
+      height: 120px;
+    }
+    
+  }
+
+}
+
