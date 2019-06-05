@@ -1,34 +1,24 @@
 header {
   padding: 0 0 0 20px;
-
-  .members {
-    font-family: 'Varela Round', sans-serif;
-    background: #F3FFC6;
-    color: #49475B;
-    display: inline-block;
-    padding: 5px 8px 5px 8px;
-    position: absolute;
-    top: 0;
-    right: 15px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    text-decoration: none;
-  }
   
   #logo {
     display: block;
     height: 38px;
     overflow: hidden;
     text-decoration: none;
-    background: #F3FFC6;
+    background: white;
     width: 120px;
     padding: 4px 15px 15px 15px;
     border-bottom-right-radius: 7px;
     border-bottom-left-radius: 7px;
     transition: all .2s;
-
+    border-bottom: 4px solid #1B4353;
+    border-left: 4px solid #1B4353;
+    border-right: 4px solid #1B4353;
+    box-shadow: 0px -16px 147px 34px rgba(0,0,0,0.1);
+    
     span.terragon {
-      opacity: .8;
+      
     }
 
     span, svg {
@@ -40,28 +30,23 @@ header {
     }
     
     &:hover, &.logoOpen {
+      box-shadow: 0px -16px 147px 34px rgba(0,0,0,0.2);
       height: 175px;
 
       span.terragon {
-        opacity: .8;
+        
       }
       
       span.social-club, svg {
-        opacity: .8;
+        opacity: 1;
       }
       
-    }
-
-    &:hover {
-      span, svg {
-        opacity: .9;
-      }
     }
 
     span {
       font-family: 'Lily Script One', cursive;
       display: block;
-      color: #49475B;
+      color: #1B4353;
       
 
       &.terragon {
@@ -78,9 +63,9 @@ header {
     
     svg {
       display: block;
-      fill: #49475B;
       width: 120px;
       height: 120px;
+      fill: #1B4353;
     }
     
   }
