@@ -6,7 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./masthead.component.scss']
 })
 export class MastheadComponent implements OnInit {
-  @Input() logoOpen: boolean = false;
+  @Input() logoOpen: boolean = true;
 
   constructor() { }
 
