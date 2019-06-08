@@ -70,11 +70,11 @@ header {
     
   }
 
-  a#githublink {
+  a.external {
     font-family: 'Varela Round', sans-serif;
     position: absolute;
     width: 100%;
-    top: 220px;
+    top: 280px;
     
     svg {
       display: inline-block;
@@ -106,6 +106,16 @@ header {
       svg {
         opacity: 1;
         top: -5px;
+      }
+      
+    }
+
+    &#telegram {
+      top: 228px;
+
+      svg {
+        width: 34px;
+        left: 1px;
       }
       
     }
