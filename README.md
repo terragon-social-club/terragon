@@ -1,5 +1,5 @@
 # Terragon Angular App
-[![Build Status](https://jenkins.terragon.us/buildStatus/icon?job=Terragon+Angular)](https://jenkins.terragon.us/job/Terragon%20Angular/)
+[![Build Status](https://jenkins.terragon.us/buildStatus/icon?job=Angular+Deploy)](https://jenkins.terragon.us/job/Angular%20Deploy/)
 
 ## Development server
 
