@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="2470" height="1300" viewBox="0 0 2470 1300">
+<rect width="2470" height="1300" fill="#BF0A30"/>
+<g fill="#ffffff">
+<g id="Stripes3"><rect id="Stripe" width="2470" height="100" y="100"/>
+ <use xlink:href="#Stripe" y="200"/><use xlink:href="#Stripe" y="400"/></g>
+ <use xlink:href="#Stripes3" y="600"/>
+ <rect width="823.333333333" height="700" fill="#002868"/>
+ <g transform="translate(411.666666667,350)">
+  <path transform="translate(0,-233)scale(0.047,0.047)" id="Star" d="M0-1000L-587.785252292,809.016994375L951.056516295-309.016994375H-951.056516295L587.785252292,809.016994375Z"/>
+  <g id="Stars4"><use xlink:href="#Star" transform="rotate(27.692307692)"/>
+  <use xlink:href="#Star" transform="rotate(55.384615385)"/>
+  <use xlink:href="#Star" transform="rotate(83.076923077)"/>
+  <use xlink:href="#Star" transform="rotate(110.769230769)"/></g>
+  <use xlink:href="#Stars4" transform="rotate(110.769230769)"/>
+  <use xlink:href="#Stars4" transform="rotate(221.538461538)"/></g></g></svg>

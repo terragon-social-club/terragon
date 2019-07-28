@@ -10,6 +10,19 @@ section {
   max-width: 780px;
   line-height: 22pt;
 
+  #close {
+    display: block;
+    position: relative;
+    margin: 5px 0 0 0;
+    
+    a {
+      position: absolute;
+      right: -80px;
+      width: 50px;
+    }
+    
+  }
+  
   .plyr {
     margin: 5px 0 20px 0;
   }

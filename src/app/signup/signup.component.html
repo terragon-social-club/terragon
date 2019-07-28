@@ -1,10 +1,167 @@
 <section>
-  <h2>Become a Founding Member</h2>
+  <h2>
+    Become a Founding Member
+    <img src="/assets/betsyross.svg" />
+  </h2>
 
-  <form>
-    <label>Name</label>
-    <input type="text" />
-    <label>Phone Number</label>
-    <input type="phone"/>
+  <p>Terragon is the home of American nationalism online. All Patriots are welcome, irrespective of race, creed or color. If you&rsquo;re a United States citizen who loves your country and your countrymen, we welcome you to join today.</p>
+
+  <div class="screenContainer">
+  <form class="screen-1" *ngIf="formSubmissionErrors | async as formErrors"
+        [class.ready]="(this.screen | async) === 1"
+        #signupForm="ngForm" (ngSubmit)="submitPersonal(signupForm)">
+    <div class="field extra">
+      <label for="in_phone">
+        Founding Contribution
+      </label>
+      <select>
+        <option>$25</option>
+        <option>$30</option>
+        <option>$40</option>
+        <option>$50</option>
+        <option>$75</option>
+        <option>$100</option>
+        <option>$250</option>
+        <option>$500</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="in_phone">
+        Name on Credit Card
+      </label>
+      <input id="in_cc" name="cc_name" type="phone"/>
+    </div>
+    <div class="field">
+      <label for="in_phone">
+        Credit Card Number
+      </label>
+      <input id="in_cc" name="cc_name" type="phone"/>
+    </div>
+    <div class="field">
+      <div class="col">
+        <label for="in_phone">
+          Security Code
+        </label>
+        <input id="in_cc" name="cc_name" type="phone"/>
+      </div>
+      <div class="col">
+
+      </div>
+      <div class="col">
+        <label for="in_phone">
+          Expiration Month
+        </label>
+        <select>
+          <option>January</option>
+          <option>February</option>
+          <option>March</option>
+          <option>April</option>
+          <option>May</option>
+          <option>June</option>
+          <option>July</option>
+          <option>August</option>
+          <option>September</option>
+          <option>October</option>
+          <option>November</option>
+          <option>December</option>
+        </select>
+      </div>
+      <div class="col">
+        <label for="in_phone">
+          Expiration Year
+        </label>
+        <select class="year">
+          <option>2019</option>
+          <option>2020</option>
+          <option>2021</option>
+          <option>2022</option>
+          <option>2023</option>
+          <option>2024</option>
+          <option>2025</option>
+          <option>2026</option>
+          <option>2027</option>
+          <option>2028</option>
+          <option>2029</option>
+          <option>2030</option>
+        </select>
+      </div>
+    </div>
   </form>
+  
+  <form *ngIf="formSubmissionErrors | async as formErrors"
+        [class.submitted]="(this.screen | async) === 1"
+        [class.submitting]="personalInformationSubmitting | async" #signupForm="ngForm" (ngSubmit)="submitPersonal(signupForm)">
+    <div [class.errorVisible]="formErrors.person_name.show" class="field name">
+      <div class="error">
+        {{formErrors.person_name.message}}
+      </div>
+      <label for="in_person_name">Name</label>
+      <input spellcheck="false" id="in_person_name" ngModel name="person_name" type="text" />
+    </div>
+    <div [class.errorVisible]="formErrors.name.show" class="field username">
+      <div class="error">
+        {{formErrors.name.message}}
+      </div>
+      <div class="status">
+        <div [class.visible]="(usernameAvailable | async) && !(invalidUsername | async)" class="current available">
+          <div class="indicator">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 22l-10-10.598 2.798-2.859 7.149 7.473 13.144-14.016 2.909 2.806z"/></svg>
+          </div>
+          <span>Username is available!</span>
+        </div>
+      </div>
+      <div class="status">
+        <div [class.visible]="!(usernameAvailable | async) && !(invalidUsername | async)" class="current unavailable">
+          <div class="indicator">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M23 20.168l-8.185-8.187 8.185-8.174-2.832-2.807-8.182 8.179-8.176-8.179-2.81 2.81 8.186 8.196-8.186 8.184 2.81 2.81 8.203-8.192 8.18 8.192z"/></svg>
+          </div>
+          <span>Username is taken.</span>
+        </div>
+      </div>
+      <label for="in_name">Username</label>
+      <input spellcheck="false" autocomplete="off" (ngModelChange)="changeUsername($event)" id="in_name" ngModel name="name" type="text" />
+    </div>
+    <div [class.errorVisible]="formErrors.email.show" class="field email">
+      <div class="error">
+        {{formErrors.email.message}}
+      </div>
+      <label for="in_email">Email Address</label>
+      <input id="in_email" ngModel name="email" type="email"/>
+    </div>
+    <div [class.errorVisible]="formErrors.phone.show" class="field phone">
+      <div class="error">
+        {{formErrors.phone.message}}
+      </div>
+      <label for="in_phone">
+        Phone Number
+        <span [class.hide]="formErrors.phone.show">optional</span>
+      </label>
+      <input id="in_phone" ngModel name="phone" type="phone"/>
+    </div>
+    <div [class.errorVisible]="formErrors.password.show"class="field password">
+      <div class="error">
+        {{formErrors.password.message}}
+      </div>
+      <label for="in_password">Password</label>
+      <input id="in_password" ngModel name="password" type="password" />
+    </div>
+    <div [class.errorVisible]="formErrors.password.show" class="field password_confirm">
+      <div class="error">
+        {{formErrors.password.message}}
+      </div>
+      <label for="in_password_confirm">Confirm Password</label>
+      <input id="in_password_confirm" ngModel name="password_confirm" type="password" />
+    </div>
+
+    <p>We send out periodic communications to our members using email and text messages. Your private information, including your real name will always be kept completely confidential and will not be shared with anyone, for any reason whatsoever.</p>
+
+    <ng-container [ngSwitch]="personalInformationSubmitting | async">
+      <button *ngSwitchCase="false" class="button" type="submit">Next</button>
+      <div *ngSwitchCase="true" class="spinner"></div>
+    </ng-container>
+    
+    
+  </form>
+
+  </div>
 </section>

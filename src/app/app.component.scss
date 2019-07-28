@@ -1,12 +1,17 @@
 section {
   margin: 0 auto;
   position: relative;
-  max-width: 1080px;
+  max-width: 1500px;
 
   masthead {
     position: fixed;
     top: 0;
     z-index: 1;
+
+    @media screen and (max-width: 1530px) {
+      position: relative;
+    }
+    
   }
 
   #content_sub {
