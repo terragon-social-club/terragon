@@ -40,7 +40,7 @@ export class LoginService {
   }
 
   constructor() {
-    this.couches.public_profiles.getSession().subscribe((session: any) => {
+    this.couches._users.getSession().subscribe((session: any) => {
       console.log(session);
     })
 

@@ -1,5 +1,17 @@
 header {
   padding: 0 0 0 20px;
+
+  @media screen and (max-width: 1530px) {
+    position: relative;
+    max-width: 780px;
+    padding: 0;
+    margin: 0 auto 20px auto;
+    left: -40px;
+  }
+
+  @media screen and (max-width: 875px) {
+    left: 0;
+  }
   
   #logo {
     display: block;
@@ -75,6 +87,11 @@ header {
     position: absolute;
     width: 100%;
     top: 280px;
+
+    @media screen and (max-width: 1530px) {
+      top: 0;
+      right: 0;
+    }
     
     svg {
       display: inline-block;
@@ -112,6 +129,11 @@ header {
 
     &#telegram {
       top: 228px;
+
+      @media screen and (max-width: 1530px) {
+        top: 0;
+        right: 0;
+      }
 
       svg {
         width: 34px;

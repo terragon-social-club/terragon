@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ApiService } from './../api.service';
-import { Subject, BehaviorSubject } from 'rxjs';
-import { tap, filter } from 'rxjs/operators';
+import { Subject, BehaviorSubject, of } from 'rxjs';
+import { tap, filter, catchError } from 'rxjs/operators';
 import { LoginService } from '../login.service';
 
 @Component({
@@ -104,17 +104,29 @@ export class SignupComponent implements OnInit {
           this.usernameAvailableFetching = true;
           this.apiService.getRequest(`user/exists/${username}`)
             .fetch()
-            .subscribe((usernameStatus: any) => {
-              this.lastUsernameFetch = Date.now();
-              this.usernameAvailableFetching = false;
-              this.usernameAvailable.next(!usernameStatus.exists);
-            });
+            .subscribe(
+              (usernameStatus: any) => {
+                this.lastUsernameFetch = Date.now();
+                this.usernameAvailableFetching = false;
+                this.usernameAvailable.next(!usernameStatus.exists);
+              },
+
+              (error) => {
+                this.lastUsernameFetch = Date.now();
+                this.usernameAvailableFetching = false;
+                this.usernameAvailable.next(false);
+                this.invalidUsername.next(true);
+              }
+
+            );
+
 
         }, nextTaskDelay);
 
       });
 
-    this.loginService.couches.public_profiles.authenticated.subscribe((authState) => {
+    this.loginService.couches._users.authenticated.subscribe((authState) => {
+      console.log("state changed");
       if (authState) {
         console.log(authState);
         this.screen.next(1);
@@ -169,7 +181,7 @@ export class SignupComponent implements OnInit {
             this.loginService.couches.public_profiles.authenticate()
               .subscribe((a) => {
                 console.log(a);
-                this.loginService.couches.public_profiles.getSession()
+                this.loginService.couches._users.getSession()
                   .subscribe((b) => {
                     console.log(b);
                   })
@@ -187,7 +199,8 @@ export class SignupComponent implements OnInit {
   }
 
   changeUsername(newValue: string) {
-    this.rawUsername.next(newValue);
+    const downcased = newValue.toLowerCase();
+    this.rawUsername.next(downcased);
   }
 
 }
