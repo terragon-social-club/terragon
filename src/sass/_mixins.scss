@@ -1,3 +1,6 @@
+$flushWithLogoMarginLeft: 170px;
+$flushWithLogoPaddingTop: 6px;
+
 @mixin disable-select() {
   -webkit-touch-callout: none;
   -webkit-user-select: none;

@@ -184,8 +184,10 @@ export class SignupComponent implements OnInit {
                 this.loginService.couches._users.getSession()
                   .subscribe((b) => {
                     console.log(b);
-                  })
-              })
+                  });
+
+              });
+
           }
 
         },
