@@ -5,6 +5,12 @@
     <span class="social-club">Social Club</span>
   </a>
 
+  <ng-container *ngIf="loggedIn | async">
+  <div *ngIf="sessionInfo | async as sessionInfo" class="loggedInBadge">
+    Welcome {{sessionInfo.userCtx.name}}
+  </div>
+  </ng-container>
+
   <a id="telegram" class="external" href="https://t.me/terragonsocial">
     <svg viewBox="0 0 240 240">
       <defs>

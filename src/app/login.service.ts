@@ -3,12 +3,14 @@ import { CouchDBCredentials, CouchDB, AuthorizationBehavior } from '@mkeen/rxcou
 import { Observer, Observable, BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { environment } from './../environments/environment';
+import { CouchDBSession } from '@mkeen/rxcouch/dist/types';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  public usernamePassword: BehaviorSubject<CouchDBCredentials | null> = new BehaviorSubject(null)
+  public usernamePassword: BehaviorSubject<CouchDBCredentials | null> = new BehaviorSubject(null);
+  public sessionInfo: BehaviorSubject<CouchDBSession | null> = new BehaviorSubject(null);
 
   private baseCouchConfig = {
     host: environment.couchHost,
@@ -40,9 +42,9 @@ export class LoginService {
   }
 
   constructor() {
-    this.couches._users.getSession().subscribe((session: any) => {
-      console.log(session);
-    })
+    this.couches._users.getSession().subscribe((session: CouchDBSession) => {
+      this.sessionInfo.next(session);
+    });
 
   }
 
