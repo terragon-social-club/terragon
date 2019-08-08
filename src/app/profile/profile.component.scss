@@ -1,0 +1,13 @@
+@import './../../sass/mixins';
+
+section {
+  font-family: 'Varela Round', sans-serif;
+  font-size: 13pt;
+  position: relative;
+  margin: 0 auto 0 auto;
+  padding: $flushWithLogoPaddingTop + 20;
+  max-width: 780px;
+  line-height: 22pt;
+  z-index: 10;
+
+}

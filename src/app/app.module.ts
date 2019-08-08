@@ -17,6 +17,8 @@ import { CouchDB as OpenCouchDB } from '@mkeen/rxcouch';
 import { PlyrModule } from 'ngx-plyr';
 import { LoginService } from './login.service';
 import { LoginComponent } from './login/login.component';
+import { ProfileComponent } from './profile/profile.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { LoginComponent } from './login/login.component';
     WatermarkComponent,
     HeroComponent,
     SignupComponent,
-    LoginComponent
+    LoginComponent,
+    ProfileComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
