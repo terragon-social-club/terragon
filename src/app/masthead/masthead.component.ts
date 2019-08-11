@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
+import { filter, take, map } from 'rxjs/operators';
 import { LoginService } from '../login.service';
-import { CouchDBSession } from '@mkeen/rxcouch/dist/types';
+import { CouchDBUserContext, CouchDBDocument } from '@mkeen/rxcouch/dist/types';
 
 @Component({
   selector: 'masthead',
@@ -12,20 +12,27 @@ import { CouchDBSession } from '@mkeen/rxcouch/dist/types';
 export class MastheadComponent implements OnInit {
   @Input() logoOpen: boolean = true;
   loggedIn: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  sessionInfo: BehaviorSubject<CouchDBSession | null> = new BehaviorSubject(null);
+  loggedInUser: BehaviorSubject<CouchDBDocument | null> = new BehaviorSubject(null);
 
   constructor(private loginService: LoginService) { }
+
+  public badgedRoles = this.loggedInUser
+    .pipe(
+      filter(info => info !== null),
+      map(info => info.roles
+        .filter(role => role !== 'member')
+        .map(role => role.replace(/_/g, ' ')))
+    );
 
   ngOnInit() {
     this.loginService.couches._users.authenticated.subscribe((authState) => {
       if (authState) {
-        this.loginService.sessionInfo
+        this.loginService.loggedInUser
           .pipe(
-            filter(sessionInfo => sessionInfo !== null),
-            take(1)
-          ).subscribe((session) => {
+            filter(user => user !== null)
+          ).subscribe((user) => {
             this.loggedIn.next(true);
-            this.sessionInfo.next(session);
+            this.loggedInUser.next(user);
           });
 
       } else {

@@ -35,12 +35,18 @@ export class LoginComponent implements OnInit {
   }
 
   attemptLogin(form: NgForm) {
-    this.loginAttemptMade = true;
-    this.loginInformationSubmitting.next(true);
-    this.loginService.usernamePassword.next({
-      username: form.controls.name.value,
-      password: form.controls.password.value
-    });
+    if (form.controls.name.value && form.controls.name.value) {
+      if (form.controls.name.value.length > 1 && form.controls.password.value.length) {
+        this.loginAttemptMade = true;
+        this.loginInformationSubmitting.next(true);
+        this.loginService.usernamePassword.next({
+          username: form.controls.name.value,
+          password: form.controls.password.value
+        });
+
+      }
+
+    }
 
   }
 

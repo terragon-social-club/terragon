@@ -4,6 +4,8 @@ import { ApiService } from './../api.service';
 import { Subject, BehaviorSubject, of } from 'rxjs';
 import { tap, filter, catchError } from 'rxjs/operators';
 import { LoginService } from '../login.service';
+import { HttpResponseWithHeaders } from '@mkeen/rxhttp';
+import { CouchDBUserContext } from '@mkeen/rxcouch/dist/types';
 
 @Component({
   selector: 'app-signup',
@@ -178,16 +180,8 @@ export class SignupComponent implements OnInit {
           } else {
             // continue on
             this.loginService.usernamePassword.next({ username: form.controls.name.value, password: form.controls.password.value });
-            this.loginService.couches.public_profiles.authenticate()
-              .subscribe((a) => {
-                console.log(a);
-                this.loginService.couches._users.getSession()
-                  .subscribe((b) => {
-                    console.log(b);
-                  });
 
-              });
-
+            this.loginService.loggedInUser.next(formSubmissionResult)
           }
 
         },

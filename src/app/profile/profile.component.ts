@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
+import { LoginService } from '../login.service';
+import { take } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -7,13 +10,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private loginService: LoginService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
+    this.loginService.sessionInfo.subscribe((authed) => {
+      if (!authed) {
+        this.router.navigateByUrl('/');
+        return;
+      }
+
+      console.log(authed, "authed");
+
+      if (!authed.roles.includes('member') || authed.roles.includes('pending_member')) {
+        this.router.navigateByUrl('/');
+      }
+
+    })
   }
 
   logout() {
-
+    this.loginService.endSession()
+      .pipe(take(1))
+      .subscribe((_ok) => { })
   }
 
 }

@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { CouchDBCredentials, CouchDB, AuthorizationBehavior } from '@mkeen/rxcouch';
 import { Observer, Observable, BehaviorSubject } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import { environment } from './../environments/environment';
-import { CouchDBSession } from '@mkeen/rxcouch/dist/types';
+import { CouchDBSession, CouchDBUserContext, CouchDBBasicResponse, CouchDBDocument } from '@mkeen/rxcouch/dist/types';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
   public usernamePassword: BehaviorSubject<CouchDBCredentials | null> = new BehaviorSubject(null);
-  public sessionInfo: BehaviorSubject<CouchDBSession | null> = new BehaviorSubject(null);
+  public sessionInfo: BehaviorSubject<CouchDBUserContext | null> = new BehaviorSubject(null);
+  public loggedInUser: BehaviorSubject<CouchDBDocument | null> = new BehaviorSubject(null);
 
   private baseCouchConfig = {
     host: environment.couchHost,
@@ -28,8 +29,7 @@ export class LoginService {
             return currentAuthState.username && currentAuthState.password && currentAuthState.username !== '' && currentAuthState.password !== '';
           }
 
-        }))
-        .subscribe((couchDBAuth: CouchDBCredentials) => {
+        })).subscribe((couchDBAuth: CouchDBCredentials) => {
           console.log("going to emit");
           observer.next(couchDBAuth);
         });
@@ -37,14 +37,75 @@ export class LoginService {
     });
 
   public couches = {
-    _users: new CouchDB(Object.assign(this.baseCouchConfig, { dbName: '_users' }), AuthorizationBehavior.cookie, this.couchAuth),
-    public_profiles: new CouchDB(Object.assign(this.baseCouchConfig, { dbName: 'public_profiles' }), AuthorizationBehavior.cookie, this.couchAuth)
+    _users: new CouchDB(Object.assign(this.baseCouchConfig, { dbName: '_users', trackChanges: false }), AuthorizationBehavior.cookie, this.couchAuth),
+    user_profiles: new CouchDB(Object.assign(this.baseCouchConfig, { dbName: 'user_profiles' }), AuthorizationBehavior.cookie, this.couchAuth)
   }
 
   constructor() {
-    this.couches._users.getSession().subscribe((session: CouchDBSession) => {
-      this.sessionInfo.next(session);
-    });
+    this.couches._users.authenticated
+      .subscribe((authStatus: boolean) => {
+        if (authStatus) {
+          console.log("auth status", authStatus);
+        }
+
+      });
+
+    this.sessionInfo
+      .subscribe((sessionInfo) => {
+        if (sessionInfo === null) {
+          this.loggedInUser.next(null);
+        } else {
+          if (sessionInfo.name !== null) {
+            if (this.loggedInUser.value === null) {
+              this.couches.user_profiles.find({
+                selector: {
+                  name: sessionInfo.name
+                }
+              })
+                .subscribe((profiles) => {
+                  console.log("profiles", profiles[0]);
+                  this.couches.user_profiles.documents.add(profiles[0]);
+                  this.loggedInUser.next(profiles[0]);
+                })
+
+
+
+            }
+
+          }
+
+        }
+
+      });
+
+    this.refreshSession();
+  }
+
+  refreshSession(userContext?: CouchDBUserContext): void {
+    if (!userContext) {
+      this.couches._users.getSession()
+        .pipe(take(1))
+        .subscribe((session: CouchDBSession) => {
+          this.sessionInfo.next(session.userCtx);
+        });
+
+    } else {
+      this.sessionInfo.next(userContext);
+    }
+
+  }
+
+  endSession() {
+    return Observable
+      .create((observer: Observer<CouchDBBasicResponse>): void => {
+        this.couches._users.destroySession()
+          .pipe(take(1))
+          .subscribe((response: CouchDBBasicResponse) => {
+            this.sessionInfo.next(null);
+            observer.next(response);
+          });
+
+      });
 
   }
 

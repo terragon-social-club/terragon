@@ -10,21 +10,13 @@
   <form class="screen-1" *ngIf="formSubmissionErrors | async as formErrors"
         [class.ready]="(this.screen | async) === 1"
         #signupForm="ngForm" (ngSubmit)="submitPersonal(signupForm)">
-    <div class="field extra">
-      <label for="in_phone">
-        Founding Contribution
-      </label>
-      <select>
-        <option>$25</option>
-        <option>$30</option>
-        <option>$40</option>
-        <option>$50</option>
-        <option>$75</option>
-        <option>$100</option>
-        <option>$250</option>
-        <option>$500</option>
-      </select>
-    </div>
+    <p class="copy first">
+      Your contribution will go directly to the Terragon Social Club. We spend money on servers, engineers, designers, and very light marketing. Our goal is for the Club to be 100% self-sufficient, with no need to serve ads to our members. All of the intellectual property that comprises the Terragon Social Club (code, design assets, etc) will always be available publicly in our Github repositories.
+    </p>
+    <p class="copy">
+      As a founding member, you will get a spiffy badge next to your name, access to exclusive content, and lifetime access to Terragon. You will also be helping to ensure that silicon valley loses its monopoly on discussion and information about current events and American culture.
+    </p>
+    <br />
     <div class="field">
       <label for="in_phone">
         Name on Credit Card
@@ -40,12 +32,15 @@
     <div class="field">
       <div class="col">
         <label for="in_phone">
-          Security Code
+          Billing Zipcode
         </label>
         <input id="in_cc" name="cc_name" type="phone"/>
       </div>
       <div class="col">
-
+        <label for="in_phone">
+          Security Code
+        </label>
+        <input id="in_cc" name="cc_name" type="phone"/>
       </div>
       <div class="col">
         <label for="in_phone">
@@ -85,6 +80,21 @@
           <option>2030</option>
         </select>
       </div>
+    </div>
+    <div class="field">
+      <label for="in_phone">
+        Founding Contribution
+      </label>
+      <select>
+        <option>$25</option>
+        <option>$30</option>
+        <option>$40</option>
+        <option>$50</option>
+        <option>$75</option>
+        <option>$100</option>
+        <option>$250</option>
+        <option>$500</option>
+      </select>
     </div>
   </form>
   

@@ -81,7 +81,6 @@ section {
       display: inline-block;
       width: calc(25% - 40px);
       padding-right: 40px;
-      padding-bottom: 25px;
 
       &:last-child {
         padding-right: 0;
@@ -268,6 +267,17 @@ section {
   p {
     margin: 0 0 30px 0;
     padding: 0;
+    width: calc(100% - 30px);
+    
+    &.copy {
+      margin: 0;
+      padding: 0;
+      text-align: left;
+
+      &.first {
+      }
+    }
+    
   }
 
   .screenContainer {
@@ -286,6 +296,11 @@ section {
     text-align: center;
     overflow: hidden;
 
+    &.screen-1 {
+      padding-top: 0 !important;
+      margin-top: -25px;
+    }
+    
     .field, p {
       position: relative;
       transition: left .3s;
