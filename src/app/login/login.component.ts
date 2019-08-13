@@ -22,8 +22,8 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.loginService.couches._users.authenticated.subscribe((authState) => {
       if (authState) {
+        this.loginService.refreshSession();
         this.loginFailed.next(false);
-        this.loginInformationSubmitting.next(false);
         this.router.navigate(['/']);
       } else {
         this.loginFailed.next(true);

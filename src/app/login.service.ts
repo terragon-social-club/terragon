@@ -4,13 +4,14 @@ import { Observer, Observable, BehaviorSubject } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { environment } from './../environments/environment';
 import { CouchDBSession, CouchDBUserContext, CouchDBBasicResponse, CouchDBDocument } from '@mkeen/rxcouch/dist/types';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
   public usernamePassword: BehaviorSubject<CouchDBCredentials | null> = new BehaviorSubject(null);
-  public sessionInfo: BehaviorSubject<CouchDBUserContext | null> = new BehaviorSubject(null);
+  private sessionInfo: BehaviorSubject<CouchDBUserContext | null> = new BehaviorSubject(null);
   public loggedInUser: BehaviorSubject<CouchDBDocument | null> = new BehaviorSubject(null);
 
   private baseCouchConfig = {
@@ -30,7 +31,7 @@ export class LoginService {
           }
 
         })).subscribe((couchDBAuth: CouchDBCredentials) => {
-          console.log("going to emit");
+          console.log("going to emit", couchDBAuth);
           observer.next(couchDBAuth);
         });
 
@@ -38,10 +39,12 @@ export class LoginService {
 
   public couches = {
     _users: new CouchDB(Object.assign(this.baseCouchConfig, { dbName: '_users', trackChanges: false }), AuthorizationBehavior.cookie, this.couchAuth),
-    user_profiles: new CouchDB(Object.assign(this.baseCouchConfig, { dbName: 'user_profiles' }), AuthorizationBehavior.cookie, this.couchAuth)
+    user_profiles: new CouchDB(Object.assign(this.baseCouchConfig, { dbName: 'user_profiles', trackChanges: true }), AuthorizationBehavior.cookie, this.couchAuth)
   }
 
-  constructor() {
+  constructor(
+    private cookieService: CookieService,
+  ) {
     this.couches._users.authenticated
       .subscribe((authStatus: boolean) => {
         if (authStatus) {
@@ -63,12 +66,9 @@ export class LoginService {
                 }
               })
                 .subscribe((profiles) => {
-                  console.log("profiles", profiles[0]);
                   this.couches.user_profiles.documents.add(profiles[0]);
                   this.loggedInUser.next(profiles[0]);
                 })
-
-
 
             }
 
@@ -78,12 +78,11 @@ export class LoginService {
 
       });
 
-    this.refreshSession();
   }
 
   refreshSession(userContext?: CouchDBUserContext): void {
     if (!userContext) {
-      this.couches._users.getSession()
+      this.couches.user_profiles.getSession()
         .pipe(take(1))
         .subscribe((session: CouchDBSession) => {
           this.sessionInfo.next(session.userCtx);

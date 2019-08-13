@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ApiService } from './../api.service';
 import { Subject, BehaviorSubject, of } from 'rxjs';
@@ -19,6 +19,8 @@ export class SignupComponent implements OnInit {
   usernameAvailableFetchTask = null;
   usernameAvailableFetching: boolean = false;
   lastUsernameFetch: number = 0;
+  personalInfoSubmitted: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  ccInformationSubmitting: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   formSubmissionErrors: BehaviorSubject<any> = new BehaviorSubject({
     person_name: { show: false, message: '' },
@@ -34,6 +36,7 @@ export class SignupComponent implements OnInit {
   currentPasswordValue: string = '';
   currentConfirmPasswordValue: string = '';
   signupForm: NgForm;
+  ccForm: NgForm;
   screen: BehaviorSubject<number> = new BehaviorSubject(0);
 
   constructor(private apiService: ApiService, private loginService: LoginService) { }
@@ -127,70 +130,93 @@ export class SignupComponent implements OnInit {
 
       });
 
-    this.loginService.couches._users.authenticated.subscribe((authState) => {
+    this.loginService.couches.user_profiles.authenticated.subscribe((authState) => {
       console.log("state changed");
       if (authState) {
         console.log(authState);
         this.screen.next(1);
         this.personalInformationSubmitting.next(false);
+        this.personalInfoSubmitted.next(true);
       }
 
     });
 
   }
 
-  submitPersonal(form: NgForm) {
-    let currentMap = Object.assign({}, this.formSubmissionErrors.value);
-    Object.keys(currentMap).map((fieldNameIndex) => {
-      console.log(fieldNameIndex);
-      currentMap[fieldNameIndex].show = false;
-    });
-
-    this.formSubmissionErrors.next(currentMap);
-
-    this.personalInformationSubmitting.next(true);
-    this.apiService.postRequest('user', JSON.stringify({
-      name: form.controls.name.value,
-      email: form.controls.email.value,
-      person_name: form.controls.person_name.value,
-      phone: form.controls.phone.value,
-      password: form.controls.password.value,
-      password_confirm: form.controls.password_confirm.value
+  submitCC(form: NgForm) {
+    console.log(form)
+    this.apiService.postRequest(`user/${this.loginService.loggedInUser.value._id}`, JSON.stringify({
+      ccName: form.controls.cc_name.value,
+      ccNumber: form.controls.cc_number.value,
+      ccZip: form.controls.cc_zip.value,
+      ccCode: form.controls.cc_code.value,
+      ccExpMonth: form.controls.cc_exp_month.value,
+      ccExpYear: form.controls.cc_exp_year.value
     })).fetch()
       .subscribe(
         (formSubmissionResult: any) => {
-          if ('errors' in formSubmissionResult) {
-            let currentMap = Object.assign({}, this.formSubmissionErrors.value);
-            formSubmissionResult.errors.map((formError: any) => {
-              if (formError.detail.field !== 'name') {
-                currentMap[formError.detail.field] = { message: formError.detail.message, show: true };
-              } else {
-                if (formError.detail.message === 'exists') {
-                  this.usernameAvailable.next(false);
-                } else {
+          this.ccInformationSubmitting.next(false);
+          console.log(formSubmissionResult);
+        }
+      )
+
+  }
+
+  submitPersonal(form: NgForm) {
+    if (!this.personalInfoSubmitted.value && !this.personalInformationSubmitting.value) {
+      let currentMap = Object.assign({}, this.formSubmissionErrors.value);
+      Object.keys(currentMap).map((fieldNameIndex) => {
+        console.log(fieldNameIndex);
+        currentMap[fieldNameIndex].show = false;
+      });
+
+      this.formSubmissionErrors.next(currentMap);
+
+      this.personalInformationSubmitting.next(true);
+      this.apiService.postRequest('user', JSON.stringify({
+        name: form.controls.name.value,
+        email: form.controls.email.value,
+        person_name: form.controls.person_name.value,
+        phone: form.controls.phone.value,
+        password: form.controls.password.value,
+        password_confirm: form.controls.password_confirm.value
+      })).fetch()
+        .subscribe(
+          (formSubmissionResult: any) => {
+            if ('errors' in formSubmissionResult) {
+              let currentMap = Object.assign({}, this.formSubmissionErrors.value);
+              formSubmissionResult.errors.map((formError: any) => {
+                if (formError.detail.field !== 'name') {
                   currentMap[formError.detail.field] = { message: formError.detail.message, show: true };
+                } else {
+                  if (formError.detail.message === 'exists') {
+                    this.usernameAvailable.next(false);
+                  } else {
+                    currentMap[formError.detail.field] = { message: formError.detail.message, show: true };
+                  }
+
                 }
 
-              }
+              });
 
-            });
+              this.formSubmissionErrors.next(currentMap);
+              this.personalInformationSubmitting.next(false);
+            } else {
+              // continue on
+              this.loginService.usernamePassword.next({ username: form.controls.name.value, password: form.controls.password.value });
 
-            this.formSubmissionErrors.next(currentMap);
-            this.personalInformationSubmitting.next(false);
-          } else {
-            // continue on
-            this.loginService.usernamePassword.next({ username: form.controls.name.value, password: form.controls.password.value });
+              this.loginService.loggedInUser.next(formSubmissionResult)
+            }
 
-            this.loginService.loggedInUser.next(formSubmissionResult)
+          },
+
+          (error) => {
+            console.log("error", error);
           }
 
-        },
+        );
 
-        (error) => {
-          console.log("error", error);
-        }
-
-      );
+    }
 
   }
 

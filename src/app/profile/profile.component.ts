@@ -16,7 +16,7 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loginService.sessionInfo.subscribe((authed) => {
+    this.loginService.loggedInUser.subscribe((authed) => {
       if (!authed) {
         this.router.navigateByUrl('/');
         return;

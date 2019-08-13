@@ -9,7 +9,7 @@
   <div class="screenContainer">
   <form class="screen-1" *ngIf="formSubmissionErrors | async as formErrors"
         [class.ready]="(this.screen | async) === 1"
-        #signupForm="ngForm" (ngSubmit)="submitPersonal(signupForm)">
+        #ccForm="ngForm" (ngSubmit)="submitCC(ccForm)">
     <p class="copy first">
       Your contribution will go directly to the Terragon Social Club. We spend money on servers, engineers, designers, and very light marketing. Our goal is for the Club to be 100% self-sufficient, with no need to serve ads to our members. All of the intellectual property that comprises the Terragon Social Club (code, design assets, etc) will always be available publicly in our Github repositories.
     </p>
@@ -18,35 +18,35 @@
     </p>
     <br />
     <div class="field">
-      <label for="in_phone">
+      <label for="in_cc_name">
         Name on Credit Card
       </label>
-      <input id="in_cc" name="cc_name" type="phone"/>
+      <input id="in_cc_name" name="cc_name" type="text"/>
     </div>
     <div class="field">
-      <label for="in_phone">
+      <label for="in_cc_number">
         Credit Card Number
       </label>
-      <input id="in_cc" name="cc_name" type="phone"/>
+      <input id="in_cc_number" name="cc_number" type="text"/>
     </div>
     <div class="field">
       <div class="col">
-        <label for="in_phone">
+        <label for="in_cc_zip">
           Billing Zipcode
         </label>
-        <input id="in_cc" name="cc_name" type="phone"/>
+        <input id="in_cc_zip" name="cc_zip" type="text"/>
       </div>
       <div class="col">
-        <label for="in_phone">
+        <label for="in_cc_code">
           Security Code
         </label>
-        <input id="in_cc" name="cc_name" type="phone"/>
+        <input id="in_cc_code" name="cc_code" type="text"/>
       </div>
       <div class="col">
-        <label for="in_phone">
+        <label for="in_cc_exp_month">
           Expiration Month
         </label>
-        <select>
+        <select name="cc_exp_month" id="in_cc_exp_month">
           <option>January</option>
           <option>February</option>
           <option>March</option>
@@ -62,10 +62,10 @@
         </select>
       </div>
       <div class="col">
-        <label for="in_phone">
+        <label for="in_cc_exp_year">
           Expiration Year
         </label>
-        <select class="year">
+        <select id="in_cc_exp_year" name="cc_exp_year"  class="year">
           <option>2019</option>
           <option>2020</option>
           <option>2021</option>
@@ -82,10 +82,10 @@
       </div>
     </div>
     <div class="field">
-      <label for="in_phone">
+      <label for="in_donation_amount">
         Founding Contribution
       </label>
-      <select>
+      <select name="donation_amount" id="in_donation_amount">
         <option>$25</option>
         <option>$30</option>
         <option>$40</option>
@@ -96,11 +96,18 @@
         <option>$500</option>
       </select>
     </div>
+
+    <div class="shouldenter" [class.hi]="personalInfoSubmitted | async" [ngSwitch]="ccInformationSubmitting | async">
+      <button *ngSwitchCase="false" class="button" type="submit">Review Info</button>
+      <div *ngSwitchCase="true" class="spinner"></div>
+    </div>
   </form>
   
   <form *ngIf="formSubmissionErrors | async as formErrors"
         [class.submitted]="(this.screen | async) === 1"
-        [class.submitting]="personalInformationSubmitting | async" #signupForm="ngForm" (ngSubmit)="submitPersonal(signupForm)">
+        [class.submitting]="personalInformationSubmitting | async"
+        #signupForm="ngForm"
+        (ngSubmit)="submitPersonal(signupForm)">
     <div [class.errorVisible]="formErrors.person_name.show" class="field name">
       <div class="error">
         {{formErrors.person_name.message}}
@@ -165,13 +172,10 @@
 
     <p>We send out periodic communications to our members using email and text messages. Your private information, including your real name will always be kept completely confidential and will not be shared with anyone, for any reason whatsoever.</p>
 
-    <ng-container [ngSwitch]="personalInformationSubmitting | async">
+    <div class="shouldleave" [class.bye]="personalInfoSubmitted | async" [ngSwitch]="personalInformationSubmitting | async">
       <button *ngSwitchCase="false" class="button" type="submit">Next</button>
       <div *ngSwitchCase="true" class="spinner"></div>
-    </ng-container>
-    
-    
+    </div>
   </form>
-
   </div>
 </section>

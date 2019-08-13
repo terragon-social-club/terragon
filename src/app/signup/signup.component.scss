@@ -218,6 +218,33 @@ section {
     }
   }
 
+  div.shouldleave {
+    position: relative;
+    top: 0;
+    transition: left .3s;
+    left: 20px;
+    &.bye {
+      
+      left: 1000px;
+    }
+  }
+
+  div.shouldenter {
+    position: relative;
+    top: 45px;
+    margin-bottom: 80px;
+    transition: left .3s;
+    left: 1000px;
+    &.hi {
+      
+      left: 20px;
+    }
+
+    button {
+      width: 165px;
+    }
+  }
+
   select {
     font-size: 1.5em;
   }

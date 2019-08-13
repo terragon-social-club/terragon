@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loginService.sessionInfo.subscribe((authed) => {
+    this.loginService.loggedInUser.subscribe((authed) => {
       if (authed) {
         if (authed.roles.includes('pending_member')) {
           this.router.navigateByUrl('/signup/founding');

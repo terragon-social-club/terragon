@@ -20,6 +20,7 @@ import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { FooterComponent } from './footer/footer.component';
 import { HomeComponent } from './home/home.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { HomeComponent } from './home/home.component';
     PlyrModule,
     FormsModule,
   ],
-  providers: [LoginService],
+  providers: [LoginService, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -9,7 +9,7 @@
   <div class="screenContainer">
     <form [class.submitting]="loginInformationSubmitting | async" #loginForm="ngForm" (ngSubmit)="attemptLogin(loginForm)">
       <p *ngIf="loginFailed | async">Login failed</p>
-      Patriots
+      
       <div class="field username">
         <label for="in_name">Username</label>
         <input spellcheck="false" autocomplete="off" id="in_name" ngModel name="name" type="text" />
