@@ -1,4 +1,5 @@
-<section>
+<section *ngIf="(this.screen | async) as screen" class="screenContainer">
+  <ng-container *ngIf="loginService.checkedWithServer | async">
   <h2>
     Become a Founding Member
     <img src="/assets/betsyross.svg" />
@@ -6,105 +7,106 @@
 
   <p>Terragon is the home of American culture online. All Americans are welcome, irrespective of race, creed or color. If you&rsquo;re a United States citizen who loves your country and your countrymen, we welcome you to join today.</p>
 
-  <div class="screenContainer">
-  <form class="screen-1" *ngIf="formSubmissionErrors | async as formErrors"
-        [class.ready]="(this.screen | async) === 1"
-        #ccForm="ngForm" (ngSubmit)="submitCC(ccForm)">
+  <div>
+    <form class="screen-1"
+          *ngIf="formCardSubmissionErrors | async as formErrors"
+          [class.ready]="screen === 2"
+          (ngSubmit)="submitCC()">
+    <fieldset [disabled]="screen !== 2">
     <p class="copy first">
-      Your contribution will go directly to the Terragon Social Club. We spend money on servers, engineers, designers, and very light marketing. Our goal is for the Club to be 100% self-sufficient, with no need to serve ads to our members. All of the intellectual property that comprises the Terragon Social Club (code, design assets, etc) will always be available publicly in our Github repositories.
+      As a founding member, you will get a spiffy badge next to your name, access to exclusive content, and lifetime access to Terragon.
     </p>
-    <p class="copy">
-      As a founding member, you will get a spiffy badge next to your name, access to exclusive content, and lifetime access to Terragon. You will also be helping to ensure that silicon valley loses its monopoly on discussion and information about current events and American culture.
-    </p>
-    <br />
-    <div class="field">
-      <label for="in_cc_name">
-        Name on Credit Card
-      </label>
-      <input id="in_cc_name" name="cc_name" type="text"/>
-    </div>
-    <div class="field">
-      <label for="in_cc_number">
-        Credit Card Number
-      </label>
-      <input id="in_cc_number" name="cc_number" type="text"/>
-    </div>
-    <div class="field">
-      <div class="col">
-        <label for="in_cc_zip">
-          Billing Zipcode
-        </label>
-        <input id="in_cc_zip" name="cc_zip" type="text"/>
-      </div>
-      <div class="col">
-        <label for="in_cc_code">
-          Security Code
-        </label>
-        <input id="in_cc_code" name="cc_code" type="text"/>
-      </div>
-      <div class="col">
-        <label for="in_cc_exp_month">
-          Expiration Month
-        </label>
-        <select name="cc_exp_month" id="in_cc_exp_month">
-          <option>January</option>
-          <option>February</option>
-          <option>March</option>
-          <option>April</option>
-          <option>May</option>
-          <option>June</option>
-          <option>July</option>
-          <option>August</option>
-          <option>September</option>
-          <option>October</option>
-          <option>November</option>
-          <option>December</option>
-        </select>
-      </div>
-      <div class="col">
-        <label for="in_cc_exp_year">
-          Expiration Year
-        </label>
-        <select id="in_cc_exp_year" name="cc_exp_year"  class="year">
-          <option>2019</option>
-          <option>2020</option>
-          <option>2021</option>
-          <option>2022</option>
-          <option>2023</option>
-          <option>2024</option>
-          <option>2025</option>
-          <option>2026</option>
-          <option>2027</option>
-          <option>2028</option>
-          <option>2029</option>
-          <option>2030</option>
-        </select>
-      </div>
-    </div>
-    <div class="field">
-      <label for="in_donation_amount">
-        Founding Contribution
-      </label>
-      <select name="donation_amount" id="in_donation_amount">
-        <option>$25</option>
-        <option>$30</option>
-        <option>$40</option>
-        <option>$50</option>
-        <option>$75</option>
-        <option>$100</option>
-        <option>$250</option>
-        <option>$500</option>
-      </select>
-    </div>
 
-    <div class="shouldenter" [class.hi]="personalInfoSubmitted | async" [ngSwitch]="ccInformationSubmitting | async">
+    <div class="bottom">
+      <div class="contribution">
+        <h3>Founding Contribution</h3>
+        <div (click)="contributionUp()" class="up"></div><br />
+        <div class="interactive" contentEditable="true"><span>{{creditCardForm.contribution}}</span></div><br />
+        <div (click)="contributionDown()" class="down"></div>
+        <p class="copy first">
+          Your contribution will go directly to continued development of the Terragon Social Club.
+        </p>
+      </div>
+      <div class="form">
+        <h3>Billing Information</h3>
+        <div class="field">
+          <label for="in_cc_name">
+            Name on Card
+          </label>
+          <input [(ngModel)]="creditCardForm.cc_name"
+                 id="in_cc_name" name="cc_name" type="text" />
+        </div>
+        <div class="field">
+          <label for="in_cc_number">
+            Card Number
+          </label>
+          <input [(ngModel)]="creditCardForm.cc_number"
+                 id="in_cc_number" name="cc_number" type="text"/>
+        </div>
+        <div class="field extra">
+          <div class="col">
+            <label for="in_cc_code">
+              Security Code
+            </label>
+            <input id="in_cc_code" name="cc_code" type="text"/>
+          </div>
+        </div>
+        <div class="field extra">
+          <div class="col">
+            <label for="in_cc_exp_month">
+              Expiration Month
+            </label>
+            <select
+              [(ngModel)]="creditCardForm.cc_exp_month"
+              name="cc_exp_month" id="in_cc_exp_month">
+              <option>January</option>
+              <option>February</option>
+              <option>March</option>
+              <option>April</option>
+              <option>May</option>
+              <option>June</option>
+              <option>July</option>
+              <option>August</option>
+              <option>September</option>
+              <option>October</option>
+              <option>November</option>
+              <option>December</option>
+            </select>
+          </div>
+          <div class="col">
+            <label for="in_cc_exp_year">
+              Expiration Year
+            </label>
+            <select
+              [(ngModel)]="creditCardForm.cc_exp_year"
+              id="in_cc_exp_year" name="cc_exp_year"  class="year">
+              <option>2019</option>
+              <option>2020</option>
+              <option>2021</option>
+              <option>2022</option>
+              <option>2023</option>
+              <option>2024</option>
+              <option>2025</option>
+              <option>2026</option>
+              <option>2027</option>
+              <option>2028</option>
+              <option>2029</option>
+              <option>2030</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="buttonHolder shouldenter" [class.hi]="personalInfoSubmitted | async" [ngSwitch]="ccInformationSubmitting | async">
       <button *ngSwitchCase="false" class="button" type="submit">Review Info</button>
       <div *ngSwitchCase="true" class="spinner"></div>
     </div>
+    </fieldset>
   </form>
-  
+  </div>
   <form *ngIf="formSubmissionErrors | async as formErrors"
-        [class.submitted]="(this.screen | async) === 1"
+        [class.submitted]="screen === 2"
         [class.submitting]="personalInformationSubmitting | async"
         #signupForm="ngForm"
         (ngSubmit)="submitPersonal(signupForm)">
@@ -177,5 +179,5 @@
       <div *ngSwitchCase="true" class="spinner"></div>
     </div>
   </form>
-  </div>
+  </ng-container>
 </section>

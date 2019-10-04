@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ApiService } from './../api.service';
 import { Subject, BehaviorSubject, of } from 'rxjs';
-import { tap, filter, catchError } from 'rxjs/operators';
+import { tap, filter, skip } from 'rxjs/operators';
 import { LoginService } from '../login.service';
 import { HttpResponseWithHeaders } from '@mkeen/rxhttp';
 import { CouchDBUserContext } from '@mkeen/rxcouch/dist/types';
@@ -31,13 +31,29 @@ export class SignupComponent implements OnInit {
     phone: { show: false, message: '' }
   });
 
+  formCardSubmissionErrors: BehaviorSubject<any> = new BehaviorSubject({
+    name_on_card: { show: false, message: '' },
+    card_number: { show: false, message: '' },
+    billing_zipcode: { show: false, message: '' },
+    security_code: { show: false, message: '' },
+    expiration_month: { show: false, message: '' },
+    expiration_year: { show: false, message: '' }
+  });
+
+  creditCardForm = {
+    cc_name: "",
+    cc_number: "",
+    cc_exp_month: "",
+    cc_exp_year: "",
+    cc_zip: "",
+    contribution: 20
+  }
+
   personalInformationSubmitting: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   currentPasswordValue: string = '';
   currentConfirmPasswordValue: string = '';
-  signupForm: NgForm;
-  ccForm: NgForm;
-  screen: BehaviorSubject<number> = new BehaviorSubject(0);
+  screen: BehaviorSubject<number> = new BehaviorSubject(1);
 
   constructor(private apiService: ApiService, private loginService: LoginService) { }
 
@@ -130,29 +146,26 @@ export class SignupComponent implements OnInit {
 
       });
 
-    this.loginService.couches.user_profiles.authenticated.subscribe((authState) => {
-      console.log("state changed");
-      if (authState) {
-        console.log(authState);
-        this.screen.next(1);
-        this.personalInformationSubmitting.next(false);
-        this.personalInfoSubmitted.next(true);
-      }
+    this.loginService.couches.user_profiles.authenticated
+      .subscribe((authState) => {
+        console.log("state changed", authState);
+        if (authState) {
+          this.screen.next(2);
+          this.personalInformationSubmitting.next(false);
+          this.personalInfoSubmitted.next(true);
+        } else {
+          this.screen.next(1);
+        }
 
-    });
+      });
 
   }
 
-  submitCC(form: NgForm) {
-    console.log(form)
-    this.apiService.postRequest(`user/${this.loginService.loggedInUser.value._id}`, JSON.stringify({
-      ccName: form.controls.cc_name.value,
-      ccNumber: form.controls.cc_number.value,
-      ccZip: form.controls.cc_zip.value,
-      ccCode: form.controls.cc_code.value,
-      ccExpMonth: form.controls.cc_exp_month.value,
-      ccExpYear: form.controls.cc_exp_year.value
-    })).fetch()
+  submitCC() {
+    console.log("glasses", this.creditCardForm);
+    this.apiService.postRequest(`user/${this.loginService.loggedInUser.value._id}/payment`, JSON.stringify(
+      this.creditCardForm
+    )).fetch()
       .subscribe(
         (formSubmissionResult: any) => {
           this.ccInformationSubmitting.next(false);
@@ -200,12 +213,14 @@ export class SignupComponent implements OnInit {
               });
 
               this.formSubmissionErrors.next(currentMap);
-              this.personalInformationSubmitting.next(false);
+
+              setTimeout(() => {
+                this.personalInformationSubmitting.next(false);
+              }, 500);
+
             } else {
               // continue on
               this.loginService.usernamePassword.next({ username: form.controls.name.value, password: form.controls.password.value });
-
-              this.loginService.loggedInUser.next(formSubmissionResult)
             }
 
           },
@@ -225,4 +240,27 @@ export class SignupComponent implements OnInit {
     this.rawUsername.next(downcased);
   }
 
+  contributionUp() {
+    if (this.creditCardForm.contribution < 50) {
+      this.creditCardForm.contribution += 5;
+    } else {
+      if (this.creditCardForm.contribution < 250) {
+        this.creditCardForm.contribution += 50;
+      } else {
+        this.creditCardForm.contribution += 250;
+      }
+    }
+  }
+
+  contributionDown() {
+    if (this.creditCardForm.contribution < 101) {
+      this.creditCardForm.contribution -= 1;
+    } else {
+      if (this.creditCardForm.contribution < 1001) {
+        this.creditCardForm.contribution -= 10;
+      } else {
+        this.creditCardForm.contribution -= 100;
+      }
+    }
+  }
 }

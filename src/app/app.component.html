@@ -1,11 +1,15 @@
-<section id="content_main">
-  <masthead></masthead>
-  <div id="content_sub">
-    <router-outlet></router-outlet>
-  </div>
-
-  <app-footer></app-footer>
+<ng-container *ngIf="loginService.checkedWithServer | async">
+<section [class.on]="modalService.open | async" class="blur" id="modal_blur">
+  <section id="content_main">
+    <masthead></masthead>
+    <div id="content_sub">
+      <router-outlet></router-outlet>
+    </div>
+    <app-footer></app-footer>
+  </section>
+  <watermark></watermark>
 </section>
-
-<watermark></watermark>
-
+<modal>
+  {{modalService.modalContent}}
+</modal>
+</ng-container>

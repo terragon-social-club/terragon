@@ -13,6 +13,7 @@ export class LoginService {
   public usernamePassword: BehaviorSubject<CouchDBCredentials | null> = new BehaviorSubject(null);
   private sessionInfo: BehaviorSubject<CouchDBUserContext | null> = new BehaviorSubject(null);
   public loggedInUser: BehaviorSubject<CouchDBDocument | null> = new BehaviorSubject(null);
+  public checkedWithServer: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   private baseCouchConfig = {
     host: environment.couchHost,
@@ -85,6 +86,7 @@ export class LoginService {
       this.couches.user_profiles.getSession()
         .pipe(take(1))
         .subscribe((session: CouchDBSession) => {
+          this.checkedWithServer.next(true);
           this.sessionInfo.next(session.userCtx);
         });
 

@@ -9,11 +9,6 @@ import { TickerComponent } from './masthead/ticker/ticker.component';
 import { WatermarkComponent } from './watermark/watermark.component';
 import { HeroComponent } from './hero/hero.component';
 import { SignupComponent } from './signup/signup.component';
-
-import { environment } from '../environments/environment';
-
-import { CouchDB as OpenCouchDB } from '@mkeen/rxcouch';
-
 import { PlyrModule } from 'ngx-plyr';
 import { LoginService } from './login.service';
 import { LoginComponent } from './login/login.component';
@@ -21,6 +16,10 @@ import { ProfileComponent } from './profile/profile.component';
 import { FooterComponent } from './footer/footer.component';
 import { HomeComponent } from './home/home.component';
 import { CookieService } from 'ngx-cookie-service';
+import { ModalComponent } from './modal/modal/modal.component';
+import { ModalService } from './modal/modal.service';
+
+import { WebcamModule } from 'ngx-webcam';
 
 @NgModule({
   declarations: [
@@ -33,15 +32,17 @@ import { CookieService } from 'ngx-cookie-service';
     LoginComponent,
     ProfileComponent,
     FooterComponent,
-    HomeComponent
+    HomeComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     PlyrModule,
     FormsModule,
+    WebcamModule
   ],
-  providers: [LoginService, CookieService],
+  providers: [LoginService, CookieService, ModalService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

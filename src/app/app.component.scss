@@ -2,6 +2,7 @@ section {
   margin: 0 auto;
   position: relative;
   max-width: 1500px;
+  min-height: 100%;
 
   masthead {
     position: fixed;
@@ -22,6 +23,14 @@ section {
     position: relative;
     z-index: 0;
     padding: 0 0 0 0;
+    height: 100%;
   }
 }
 
+.blur {
+  filter: blur(0);
+  transition: .75s filter;
+  &.on {
+    filter: blur(25px);
+  }
+}

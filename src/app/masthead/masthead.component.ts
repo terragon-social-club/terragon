@@ -21,7 +21,7 @@ export class MastheadComponent implements OnInit {
   ngOnInit() {
     this.loginService.loggedInUser
       .pipe(filter(val => !!val))
-      .subscribe(loggedInUser => this.loggedInUserProfile = this.loginService.couches.user_profiles.doc(loggedInUser._id))
+      .subscribe((loggedInUser) => { console.log(loggedInUser); this.loggedInUserProfile = this.loginService.couches.user_profiles.doc(loggedInUser._id) })
   }
 
 }
