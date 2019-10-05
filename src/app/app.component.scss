@@ -1,3 +1,5 @@
+@import "~compass-mixins/lib/compass";
+
 section {
   margin: 0 auto;
   position: relative;
@@ -25,12 +27,16 @@ section {
     padding: 0 0 0 0;
     height: 100%;
   }
+  
 }
 
 .blur {
-  filter: blur(0);
-  transition: .75s filter;
+  @include transform(translate3d(0,0,0));
+  @include transition(all, .25s);
+  @include filter(blur(0px));
+  
   &.on {
-    filter: blur(25px);
+    @include filter(blur(25px));
   }
+  
 }

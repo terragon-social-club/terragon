@@ -1,6 +1,8 @@
+@import "~compass-mixins/lib/compass";
+
 #modal {
-  $cardWidth: 50%;
-  $cardHeight: 300px;
+  $cardWidth: 100%;
+  $cardHeight: 100%;
   
   position: fixed;
   top: 0;
@@ -11,21 +13,19 @@
   z-index: 888;
 
   .dialog_card {
-    height: $cardHeight;
-    width: $cardWidth;
+    @include transition(all, .25s);
+    height: calc(100% - 60px);
+    width: calc(100% - 60px);
     background: rgba(253,255,252,.5);
-    filter: blur(25px);
-    transition: 7s filter;
+    @include filter(blur(15px));
     border-radius: 7px;
-    -webkit-box-shadow: 0px 20px 100px 15px rgba(0,0,0,0.05);
-    -moz-box-shadow: 0px 20px 100px 15px rgba(0,0,0,0.05);
-    box-shadow: 0px 20px 100px 15px rgba(0,0,0,0.05);
+    @include box-shadow(rgba(0,0,0,0) 0 0 5px);
     position: relative;
-    top: 50%;
-    margin: -225px auto 0 auto;
+    margin: 30px auto 0 auto;
 
     &.visible {
-      filter: blur(0px);
+      @include filter(blur(0px));
+      @include box-shadow(rgba(0,0,0,.3) 0 0 50px);
     }
     
   }

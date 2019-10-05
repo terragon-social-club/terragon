@@ -113,6 +113,7 @@ header {
     font-family: 'Varela Round', sans-serif;
     position: relative;
     display: block;
+    cursor: pointer;
     
     svg {
       display: inline-block;
@@ -186,7 +187,7 @@ header {
       background: #FF784F;
       text-transform: uppercase;
       top: -3px;
-      margin-right: 7px;
+      margin-right: 5px;
       position: relative;
     }
 

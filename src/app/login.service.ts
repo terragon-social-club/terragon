@@ -32,7 +32,6 @@ export class LoginService {
           }
 
         })).subscribe((couchDBAuth: CouchDBCredentials) => {
-          console.log("going to emit", couchDBAuth);
           observer.next(couchDBAuth);
         });
 
@@ -46,14 +45,6 @@ export class LoginService {
   constructor(
     private cookieService: CookieService,
   ) {
-    this.couches._users.authenticated
-      .subscribe((authStatus: boolean) => {
-        if (authStatus) {
-          console.log("auth status", authStatus);
-        }
-
-      });
-
     this.sessionInfo
       .subscribe((sessionInfo) => {
         if (sessionInfo === null) {
@@ -86,11 +77,13 @@ export class LoginService {
       this.couches.user_profiles.getSession()
         .pipe(take(1))
         .subscribe((session: CouchDBSession) => {
+          console.log(session, "from server");
           this.checkedWithServer.next(true);
           this.sessionInfo.next(session.userCtx);
         });
 
     } else {
+      console.log(userContext, "passed in")
       this.sessionInfo.next(userContext);
     }
 

@@ -16,4 +16,8 @@ export class ModalComponent implements AfterViewInit {
 
   }
 
+  close() {
+    this.modalService.open.next(false);
+  }
+
 }

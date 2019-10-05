@@ -22,6 +22,7 @@
     "@mkeen/rxcouch": "^3.1.1",
     "@mkeen/rxhttp": "^1.9.5",
     "@nguniversal/express-engine": "^8.1.1",
+    "compass-mixins": "^0.12.10",
     "ngx-cookie-service": "^2.2.0",
     "ngx-plyr": "^1.2.2",
     "ngx-webcam": "^0.2.6",

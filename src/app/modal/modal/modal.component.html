@@ -1,5 +1,5 @@
 <section *ngIf="modalService.open | async as open" id="modal">
-  <div [class.visible]="open" class="dialog_card">
-    
+  <div [class.visible]="(modalService.openDelay | async) === true" class="dialog_card">
+    <div (click)="close()">Back</div>
   </div>
 </section>

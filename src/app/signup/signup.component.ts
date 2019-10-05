@@ -219,7 +219,7 @@ export class SignupComponent implements OnInit {
               }, 500);
 
             } else {
-              // continue on
+              // Success
               this.loginService.usernamePassword.next({ username: form.controls.name.value, password: form.controls.password.value });
             }
 
