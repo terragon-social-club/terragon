@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ApiService } from './../api.service';
-import { Subject, BehaviorSubject, of } from 'rxjs';
-import { tap, filter, skip } from 'rxjs/operators';
+import { Subject, BehaviorSubject, zip } from 'rxjs';
+import { tap, filter, takeUntil } from 'rxjs/operators';
 import { LoginService } from '../login.service';
 import { HttpResponseWithHeaders } from '@mkeen/rxhttp';
 import { CouchDBUserContext } from '@mkeen/rxcouch/dist/types';
@@ -21,6 +21,8 @@ export class SignupComponent implements OnInit {
   lastUsernameFetch: number = 0;
   personalInfoSubmitted: BehaviorSubject<boolean> = new BehaviorSubject(false);
   ccInformationSubmitting: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  unsubscribeFromUsernameField: Subject<boolean> = new Subject();
 
   formSubmissionErrors: BehaviorSubject<any> = new BehaviorSubject({
     person_name: { show: false, message: '' },
@@ -83,6 +85,7 @@ export class SignupComponent implements OnInit {
   ngOnInit() {
     this.rawUsername
       .pipe(
+        takeUntil(this.unsubscribeFromUsernameField),
         filter((_username) => {
           return !this.usernameAvailableFetching;
         }),
@@ -132,7 +135,7 @@ export class SignupComponent implements OnInit {
                 this.usernameAvailable.next(!usernameStatus.exists);
               },
 
-              (error) => {
+              (_error) => {
                 this.lastUsernameFetch = Date.now();
                 this.usernameAvailableFetching = false;
                 this.usernameAvailable.next(false);
@@ -146,24 +149,30 @@ export class SignupComponent implements OnInit {
 
       });
 
-    this.loginService.couches.user_profiles.authenticated
-      .subscribe((authState) => {
-        console.log("state changed", authState);
-        if (authState) {
-          this.screen.next(2);
-          this.personalInformationSubmitting.next(false);
+    zip(
+      this.loginService.couches.user_profiles.authenticated,
+      this.loginService.couches._users.authenticated
+    ).subscribe((authStates: any[]) => {
+      console.log("state changed", authStates);
+      if (authStates[0] && authStates[1]) {
+        this.screen.next(2);
+        this.personalInformationSubmitting.next(false);
+        if (!this.personalInfoSubmitted.value === false) {
           this.personalInfoSubmitted.next(true);
-        } else {
-          this.screen.next(1);
         }
 
-      });
+      } else {
+        this.screen.next(1);
+      }
+
+    });
 
   }
 
   submitCC() {
-    console.log("glasses", this.creditCardForm);
-    this.apiService.postRequest(`user/${this.loginService.loggedInUser.value._id}/payment`, JSON.stringify(
+    console.log(this.loginService.loggedInUser.value);
+    this.creditCardForm.contribution;
+    this.apiService.postRequest(`user/org.couchdb.user:${this.loginService.loggedInUser.value.name}/payment`, JSON.stringify(
       this.creditCardForm
     )).fetch()
       .subscribe(
@@ -220,7 +229,8 @@ export class SignupComponent implements OnInit {
 
             } else {
               // Success
-              this.loginService.usernamePassword.next({ username: form.controls.name.value, password: form.controls.password.value });
+              this.loginService.couches._users.authenticated.next(true);
+              this.unsubscribeFromUsernameField.next(true);
             }
 
           },

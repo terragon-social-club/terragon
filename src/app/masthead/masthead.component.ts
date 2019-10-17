@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { filter, take, map } from 'rxjs/operators';
+import { filter, merge } from 'rxjs/operators';
 import { LoginService } from '../login.service';
 import { CouchDBDocument } from '@mkeen/rxcouch';
 import { ModalService } from '../modal/modal.service';
@@ -12,7 +12,7 @@ import { ModalService } from '../modal/modal.service';
 })
 export class MastheadComponent implements OnInit {
   @Input() logoOpen: boolean = true;
-  loggedInUserProfile: BehaviorSubject<CouchDBDocument> | null = null;
+  loggedInUserProfile: BehaviorSubject<CouchDBDocument | null> = new BehaviorSubject(null);
 
   constructor(
     private loginService: LoginService,
@@ -22,7 +22,15 @@ export class MastheadComponent implements OnInit {
   ngOnInit() {
     this.loginService.loggedInUser
       .pipe(filter(val => !!val))
-      .subscribe((loggedInUser) => { console.log(loggedInUser); this.loggedInUserProfile = this.loginService.couches.user_profiles.doc(loggedInUser._id) })
+      .subscribe(loggedInUser => {
+        console.log("subscribing");
+        this.loginService.couches.user_profiles.doc(loggedInUser._id)
+          .subscribe((user) => {
+            console.log("mechanism");
+            this.loggedInUserProfile.next(user);
+          })
+      });
+
   }
 
   activateProfile() {

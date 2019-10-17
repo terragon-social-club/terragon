@@ -16,7 +16,6 @@
     <p class="copy first">
       As a founding member, you will get a spiffy badge next to your name, access to exclusive content, and lifetime access to Terragon.
     </p>
-
     <div class="bottom">
       <div class="contribution">
         <h3>Founding Contribution</h3>
@@ -24,7 +23,7 @@
         <div class="interactive" contentEditable="true"><span>{{creditCardForm.contribution}}</span></div><br />
         <div (click)="contributionDown()" class="down"></div>
         <p class="copy first">
-          Your contribution will go directly to continued development of the Terragon Social Club.
+          Your contribution will help fund the Terragon Social Club.
         </p>
       </div>
       <div class="form">
@@ -59,18 +58,18 @@
             <select
               [(ngModel)]="creditCardForm.cc_exp_month"
               name="cc_exp_month" id="in_cc_exp_month">
-              <option>January</option>
-              <option>February</option>
-              <option>March</option>
-              <option>April</option>
-              <option>May</option>
-              <option>June</option>
-              <option>July</option>
-              <option>August</option>
-              <option>September</option>
-              <option>October</option>
-              <option>November</option>
-              <option>December</option>
+              <option value="01">January</option>
+              <option value="02">February</option>
+              <option value="03">March</option>
+              <option value="04">April</option>
+              <option value="05">May</option>
+              <option value="06">June</option>
+              <option value="07">July</option>
+              <option value="08">August</option>
+              <option value="09">September</option>
+              <option value="10">October</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
             </select>
           </div>
           <div class="col">
@@ -99,7 +98,7 @@
     </div>
     
     <div class="buttonHolder shouldenter" [class.hi]="personalInfoSubmitted | async" [ngSwitch]="ccInformationSubmitting | async">
-      <button *ngSwitchCase="false" class="button" type="submit">Review Info</button>
+      <button *ngSwitchCase="false" class="button" type="submit">Finish Signup</button>
       <div *ngSwitchCase="true" class="spinner"></div>
     </div>
     </fieldset>

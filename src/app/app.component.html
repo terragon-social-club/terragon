@@ -1,4 +1,4 @@
-<ng-container *ngIf="loginService.checkedWithServer | async">
+<ng-container *ngIf="(loginService.checkedWithServer | async) === true">
 <section [class.on]="modalService.open | async" class="blur" id="modal_blur">
   <section id="content_main">
     <masthead></masthead>

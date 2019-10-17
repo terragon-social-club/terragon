@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CouchDBCredentials, CouchDB, AuthorizationBehavior } from '@mkeen/rxcouch';
-import { Observer, Observable, BehaviorSubject } from 'rxjs';
+import { Observer, Observable, BehaviorSubject, combineLatest, zip } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { environment } from './../environments/environment';
-import { CouchDBSession, CouchDBUserContext, CouchDBBasicResponse, CouchDBDocument } from '@mkeen/rxcouch/dist/types';
+import { CouchDBUserContext, CouchDBBasicResponse, CouchDBDocument } from '@mkeen/rxcouch/dist/types';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
@@ -11,9 +11,10 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class LoginService {
   public usernamePassword: BehaviorSubject<CouchDBCredentials | null> = new BehaviorSubject(null);
-  private sessionInfo: BehaviorSubject<CouchDBUserContext | null> = new BehaviorSubject(null);
   public loggedInUser: BehaviorSubject<CouchDBDocument | null> = new BehaviorSubject(null);
   public checkedWithServer: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  private sessionInfo: BehaviorSubject<CouchDBUserContext | null> = new BehaviorSubject(null);
 
   private baseCouchConfig = {
     host: environment.couchHost,
@@ -21,21 +22,7 @@ export class LoginService {
     ssl: environment.couchSsl
   }
 
-  private couchAuth = Observable
-    .create((observer: Observer<CouchDBCredentials>): void => {
-      this.usernamePassword
-        .pipe(filter((currentAuthState) => {
-          if (currentAuthState === null) {
-            return false;
-          } else {
-            return currentAuthState.username && currentAuthState.password && currentAuthState.username !== '' && currentAuthState.password !== '';
-          }
-
-        })).subscribe((couchDBAuth: CouchDBCredentials) => {
-          observer.next(couchDBAuth);
-        });
-
-    });
+  private couchAuth: Observable<CouchDBCredentials>;
 
   public couches = {
     _users: new CouchDB(Object.assign(this.baseCouchConfig, { dbName: '_users', trackChanges: false }), AuthorizationBehavior.cookie, this.couchAuth),
@@ -45,6 +32,31 @@ export class LoginService {
   constructor(
     private cookieService: CookieService,
   ) {
+    combineLatest(
+      this.couches._users.loginAttemptMade,
+      this.couches.user_profiles.loginAttemptMade
+    ).pipe(
+      filter((attempts) => {
+        console.log(attempts);
+        return attempts[0] && attempts[0]
+      }),
+      take(1)
+    ).subscribe((_attempts) => {
+      console.log("hiiiii");
+      this.checkedWithServer.next(true);
+    });
+
+    this.couchAuth = Observable
+      .create((observer: Observer<CouchDBCredentials>): void => {
+        this.usernamePassword
+          .pipe(take(1), filter(currentAuthState => currentAuthState !== null))
+          .subscribe((couchDBAuth: CouchDBCredentials) => {
+            console.log("got", couchDBAuth);
+            observer.next(couchDBAuth);
+          });
+
+      });
+
     this.sessionInfo
       .subscribe((sessionInfo) => {
         if (sessionInfo === null) {
@@ -56,11 +68,11 @@ export class LoginService {
                 selector: {
                   name: sessionInfo.name
                 }
-              })
-                .subscribe((profiles) => {
-                  this.couches.user_profiles.documents.add(profiles[0]);
-                  this.loggedInUser.next(profiles[0]);
-                })
+
+              }).subscribe((profiles) => {
+                this.couches.user_profiles.documents.add(profiles[0]);
+                this.loggedInUser.next(profiles[0]);
+              });
 
             }
 
@@ -70,23 +82,32 @@ export class LoginService {
 
       });
 
+    this.couches._users.authenticated.subscribe(
+      (_authenticated) => {
+        this.couches._users.getSession()
+          .pipe(take(1))
+          .subscribe((session) => {
+            if (session) {
+              console.log(session, "from server");
+              this.sessionInfo.next(session.userCtx);
+            }
+
+            if (!this.checkedWithServer.value) {
+              this.checkedWithServer.next(true);
+            }
+
+          });
+
+      });
+
   }
 
-  refreshSession(userContext?: CouchDBUserContext): void {
-    if (!userContext) {
-      this.couches.user_profiles.getSession()
-        .pipe(take(1))
-        .subscribe((session: CouchDBSession) => {
-          console.log(session, "from server");
-          this.checkedWithServer.next(true);
-          this.sessionInfo.next(session.userCtx);
-        });
-
-    } else {
-      console.log(userContext, "passed in")
-      this.sessionInfo.next(userContext);
-    }
-
+  receivedAuthCookie() {
+    Object.keys(this.couches).map((couchIdx) => {
+      if (!this.couches[couchIdx].authenticated.value) {
+        this.couches[couchIdx].authenticated.next(true);
+      }
+    })
   }
 
   endSession() {

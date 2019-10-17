@@ -13,6 +13,5 @@ export class AppComponent implements OnInit {
     public modalService: ModalService) { }
 
   ngOnInit() {
-    this.loginService.refreshSession();
   }
 }

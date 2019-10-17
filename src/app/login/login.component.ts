@@ -20,9 +20,9 @@ export class LoginComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    this.loginService.couches._users.authenticated.subscribe((authState) => {
+    this.loginService.couches.user_profiles.authenticated.subscribe((authState) => {
+      console.log(authState, "!!!!!");
       if (authState) {
-        this.loginService.refreshSession();
         this.loginFailed.next(false);
         this.router.navigate(['/']);
       } else {
