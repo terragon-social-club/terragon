@@ -8,7 +8,7 @@
   <ng-container *ngIf="loggedInUserProfile | async let loggedInUser; else loggedOut">
     <a (click)="activateProfile()" class="internal" id="profile">
       <img src="/assets/thomas-jefferson.svg" />
-      <span>{{loggedInUser.name}}</span>
+      <span>{{loggedInUser._id}}</span>
       <div *ngFor="let badge of loggedInUser.roles" class="badge">{{badge}}</div>
     </a>
   </ng-container>  

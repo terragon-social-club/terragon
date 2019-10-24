@@ -63,15 +63,13 @@ export class LoginService {
           this.loggedInUser.next(null);
         } else {
           if (sessionInfo.name !== null) {
+            console.log("name is", sessionInfo.name)
             if (this.loggedInUser.value === null) {
-              this.couches.user_profiles.find({
-                selector: {
-                  name: sessionInfo.name
-                }
-
-              }).subscribe((profiles) => {
-                this.couches.user_profiles.documents.add(profiles[0]);
-                this.loggedInUser.next(profiles[0]);
+              this.couches.user_profiles.doc(sessionInfo.name)
+              .subscribe((profile) => {
+                console.log("got profiles", profile);
+                this.couches.user_profiles.documents.add(profile);
+                this.loggedInUser.next(profile);
               });
 
             }
@@ -88,7 +86,6 @@ export class LoginService {
           .pipe(take(1))
           .subscribe((session) => {
             if (session) {
-              console.log(session, "from server");
               this.sessionInfo.next(session.userCtx);
             }
 

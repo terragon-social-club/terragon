@@ -26,9 +26,9 @@ export class MastheadComponent implements OnInit {
         console.log("subscribing");
         this.loginService.couches.user_profiles.doc(loggedInUser._id)
           .subscribe((user) => {
-            console.log("mechanism");
+            console.log("mechanism", user);
             this.loggedInUserProfile.next(user);
-          })
+          });
       });
 
   }

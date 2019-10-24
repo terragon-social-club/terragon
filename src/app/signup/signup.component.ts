@@ -149,23 +149,21 @@ export class SignupComponent implements OnInit {
 
       });
 
-    zip(
-      this.loginService.couches.user_profiles.authenticated,
-      this.loginService.couches._users.authenticated
-    ).subscribe((authStates: any[]) => {
-      console.log("state changed", authStates);
-      if (authStates[0] && authStates[1]) {
-        this.screen.next(2);
-        this.personalInformationSubmitting.next(false);
-        if (!this.personalInfoSubmitted.value === false) {
-          this.personalInfoSubmitted.next(true);
+    this.loginService.couches._users.authenticated
+      .subscribe((authState: boolean) => {
+        console.log('state changed', authState);
+        if (authState) {
+          this.screen.next(2);
+          this.personalInformationSubmitting.next(false);
+          if (!this.personalInfoSubmitted.value === false) {
+            this.personalInfoSubmitted.next(true);
+          }
+
+        } else {
+          this.screen.next(1);
         }
 
-      } else {
-        this.screen.next(1);
-      }
-
-    });
+      });
 
   }
 
