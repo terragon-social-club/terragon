@@ -228,6 +228,7 @@ export class SignupComponent implements OnInit {
             } else {
               // Success
               this.loginService.couches._users.authenticated.next(true);
+              this.loginService.sessionInfo.next(formSubmissionResult);
               this.unsubscribeFromUsernameField.next(true);
             }
 

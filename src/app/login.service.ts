@@ -14,7 +14,7 @@ export class LoginService {
   public loggedInUser: BehaviorSubject<CouchDBDocument | null> = new BehaviorSubject(null);
   public checkedWithServer: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  private sessionInfo: BehaviorSubject<CouchDBUserContext | null> = new BehaviorSubject(null);
+  public sessionInfo: BehaviorSubject<CouchDBUserContext | null> = new BehaviorSubject(null);
 
   private baseCouchConfig = {
     host: environment.couchHost,
