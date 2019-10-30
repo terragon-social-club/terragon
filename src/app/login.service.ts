@@ -32,20 +32,6 @@ export class LoginService {
   constructor(
     private cookieService: CookieService,
   ) {
-    combineLatest(
-      this.couches._users.loginAttemptMade,
-      this.couches.user_profiles.loginAttemptMade
-    ).pipe(
-      filter((attempts) => {
-        console.log(attempts);
-        return attempts[0] && attempts[0]
-      }),
-      take(1)
-    ).subscribe((_attempts) => {
-      console.log("hiiiii");
-      this.checkedWithServer.next(true);
-    });
-
     this.couchAuth = Observable
       .create((observer: Observer<CouchDBCredentials>): void => {
         this.usernamePassword
@@ -57,21 +43,32 @@ export class LoginService {
 
       });
 
+    this.couches._users.loginAttemptMade.pipe(
+      filter(attemptMade => !!attemptMade),
+      take(1)
+    ).subscribe((_attemptMade) => {
+      console.log("attempt made")
+      this.checkedWithServer.next(true);
+    });
+
     this.sessionInfo
       .subscribe((sessionInfo) => {
         if (sessionInfo === null) {
           this.loggedInUser.next(null);
         } else {
           if (sessionInfo.name !== null) {
-            console.log("name is", sessionInfo.name)
             if (this.loggedInUser.value === null) {
-              this.couches.user_profiles.doc(sessionInfo.name)
-              .subscribe((profile) => {
+              this.couches.user_profiles.doc(sessionInfo.name).subscribe((profile) => {
                 console.log("got profiles", profile);
                 this.couches.user_profiles.documents.add(profile);
                 this.loggedInUser.next(profile);
               });
 
+            }
+
+            if (!this.couches.user_profiles.authenticated.value) {
+              // Need an entry here for each non-user database
+              this.couches.user_profiles.authenticated.next(true);
             }
 
           }
@@ -80,21 +77,10 @@ export class LoginService {
 
       });
 
-    this.couches._users.authenticated.subscribe(
-      (_authenticated) => {
-        this.couches._users.getSession()
-          .pipe(take(1))
-          .subscribe((session) => {
-            if (session) {
-              this.sessionInfo.next(session.userCtx);
-            }
-
-            if (!this.checkedWithServer.value) {
-              this.checkedWithServer.next(true);
-            }
-
-          });
-
+    this.couches._users.getSession()
+      .pipe(take(1))
+      .subscribe((session) => {
+        this.sessionInfo.next(session.userCtx);
       });
 
   }
