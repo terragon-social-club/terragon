@@ -204,7 +204,7 @@ export class SignupComponent implements OnInit {
         .subscribe(
           (formSubmissionResult: any) => {
             if ('errors' in formSubmissionResult) {
-              let currentMap = Object.assign({}, this.formSubmissionErrors.value);
+              const currentMap = Object.assign({}, this.formSubmissionErrors.value);
               formSubmissionResult.errors.map((formError: any) => {
                 if (formError.detail.field !== 'name') {
                   currentMap[formError.detail.field] = { message: formError.detail.message, show: true };
