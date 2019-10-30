@@ -51,11 +51,18 @@ export class SignupComponent implements OnInit {
     contribution: 20
   }
 
+  invitationCode = '';
+
   personalInformationSubmitting: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   currentPasswordValue: string = '';
   currentConfirmPasswordValue: string = '';
   screen: BehaviorSubject<number> = new BehaviorSubject(1);
+
+  inviteHighlight: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  creditHighlight: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  creditHighlightBlurTimeout = null;
 
   constructor(private apiService: ApiService, private loginService: LoginService) { }
 
@@ -164,6 +171,30 @@ export class SignupComponent implements OnInit {
         }
 
       });
+
+  }
+
+  highlightInvite() {
+    this.creditHighlight.next(false);
+    this.inviteHighlight.next(true);
+  }
+
+  resetInvite() {
+    this.inviteHighlight.next(false);
+  }
+
+  highlightCredit() {
+    if (this.creditHighlightBlurTimeout) {
+      clearTimeout(this.creditHighlightBlurTimeout);
+    }
+    this.inviteHighlight.next(false);
+    this.creditHighlight.next(true);
+  }
+
+  resetCredit() {
+    this.creditHighlightBlurTimeout = setTimeout(() => {
+      this.creditHighlight.next(false);
+    }, 100);
 
   }
 

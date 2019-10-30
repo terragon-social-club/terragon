@@ -16,16 +16,17 @@
     <p class="copy first">
       As a founding member, you will get a spiffy badge next to your name, access to exclusive content, and lifetime access to Terragon.
     </p>
-    <div class="bottom">
+    <div class="bottom" [class.invite_highlight]="inviteHighlight | async" [class.credit_highlight]="creditHighlight | async">
       <div class="contribution">
-        <h3>Founding Contribution</h3>
-        <div (click)="contributionUp()" class="up"></div><br />
-        <div class="interactive" contentEditable="true"><span>{{creditCardForm.contribution}}</span></div><br />
-        <div (click)="contributionDown()" class="down"></div>
-        <p class="copy first">
-          Your contribution will help fund the Terragon Social Club.
-        </p>
+        <h3>Invitation Code</h3>
+        <p>If you&rsquo;ve got an invitation code, you can join for free!</p>
+        <div class="field">
+          <input [(ngModel)]="invitationCode"
+                 id="in_invitation_code" name="invitation_code" type="text" 
+                 placeholder="Invitation Code" (focus)="highlightInvite()" (blur)="resetInvite()" />
+        </div>
       </div>
+      <div class="or">or</div>
       <div class="form">
         <h3>Billing Information</h3>
         <div class="field">
@@ -33,31 +34,38 @@
             Name on Card
           </label>
           <input [(ngModel)]="creditCardForm.cc_name"
-                 id="in_cc_name" name="cc_name" type="text" />
+                 id="in_cc_name" name="cc_name" type="text"
+                 (focus)="highlightCredit()"
+                 (blur)="resetCredit()" />
         </div>
         <div class="field">
           <label for="in_cc_number">
             Card Number
           </label>
           <input [(ngModel)]="creditCardForm.cc_number"
-                 id="in_cc_number" name="cc_number" type="text"/>
+                 id="in_cc_number" name="cc_number" type="text"
+                 (focus)="highlightCredit()"
+                 (blur)="resetCredit()" />
         </div>
         <div class="field extra">
           <div class="col">
             <label for="in_cc_code">
               Security Code
             </label>
-            <input id="in_cc_code" name="cc_code" type="text"/>
+            <input id="in_cc_code" name="cc_code" type="text"
+            (focus)="highlightCredit()"
+            (blur)="resetCredit()" />
           </div>
         </div>
-        <div class="field extra">
+        <div class="field extra overflow">
           <div class="col">
             <label for="in_cc_exp_month">
               Expiration Month
             </label>
-            <select
-              [(ngModel)]="creditCardForm.cc_exp_month"
-              name="cc_exp_month" id="in_cc_exp_month">
+            <select [(ngModel)]="creditCardForm.cc_exp_month"
+            name="cc_exp_month" id="in_cc_exp_month"
+            (focus)="highlightCredit()"
+            (blur)="resetCredit()">
               <option value="01">January</option>
               <option value="02">February</option>
               <option value="03">March</option>
@@ -76,9 +84,10 @@
             <label for="in_cc_exp_year">
               Expiration Year
             </label>
-            <select
-              [(ngModel)]="creditCardForm.cc_exp_year"
-              id="in_cc_exp_year" name="cc_exp_year"  class="year">
+            <select [(ngModel)]="creditCardForm.cc_exp_year"
+            id="in_cc_exp_year" name="cc_exp_year"  class="year"
+            (focus)="highlightCredit()"
+            (blur)="resetCredit()">
               <option>2019</option>
               <option>2020</option>
               <option>2021</option>
