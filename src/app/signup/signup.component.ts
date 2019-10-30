@@ -169,7 +169,6 @@ export class SignupComponent implements OnInit {
 
   submitCC() {
     console.log(this.loginService.loggedInUser.value);
-    this.creditCardForm.contribution;
     this.apiService.postRequest(`user/org.couchdb.user:${this.loginService.loggedInUser.value.name}/payment`, JSON.stringify(
       this.creditCardForm
     )).fetch()
@@ -235,7 +234,7 @@ export class SignupComponent implements OnInit {
           },
 
           (error) => {
-            console.log("error", error);
+            console.log('error', error);
           }
 
         );

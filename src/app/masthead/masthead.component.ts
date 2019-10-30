@@ -11,7 +11,7 @@ import { ModalService } from '../modal/modal.service';
   styleUrls: ['./masthead.component.scss']
 })
 export class MastheadComponent implements OnInit {
-  @Input() logoOpen: boolean = true;
+  @Input() logoOpen = true;
   loggedInUserProfile: BehaviorSubject<CouchDBDocument | null> = new BehaviorSubject(null);
 
   constructor(
