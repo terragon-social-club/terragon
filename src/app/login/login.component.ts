@@ -10,9 +10,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  loginAttemptMade: boolean = false;
+  loginAttemptMade = false;
   loginFailed: Subject<boolean> = new Subject();
-  loginForm: NgForm;
   loginInformationSubmitting: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(
@@ -21,7 +20,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginService.couches.user_profiles.authenticated.subscribe((authState) => {
-      console.log(authState, "!!!!!");
+      console.log(authState, "authenticated question")
       if (authState) {
         this.loginFailed.next(false);
         this.router.navigate(['/']);

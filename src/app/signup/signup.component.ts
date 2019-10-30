@@ -203,22 +203,22 @@ export class SignupComponent implements OnInit {
         .subscribe(
           (formSubmissionResult: any) => {
             if ('errors' in formSubmissionResult) {
-              const currentMap = Object.assign({}, this.formSubmissionErrors.value);
+              const currentDeepMap = Object.assign({}, this.formSubmissionErrors.value);
               formSubmissionResult.errors.map((formError: any) => {
                 if (formError.detail.field !== 'name') {
-                  currentMap[formError.detail.field] = { message: formError.detail.message, show: true };
+                  currentDeepMap[formError.detail.field] = { message: formError.detail.message, show: true };
                 } else {
                   if (formError.detail.message === 'exists') {
                     this.usernameAvailable.next(false);
                   } else {
-                    currentMap[formError.detail.field] = { message: formError.detail.message, show: true };
+                    currentDeepMap[formError.detail.field] = { message: formError.detail.message, show: true };
                   }
 
                 }
 
               });
 
-              this.formSubmissionErrors.next(currentMap);
+              this.formSubmissionErrors.next(currentDeepMap);
 
               setTimeout(() => {
                 this.personalInformationSubmitting.next(false);

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CouchDBCredentials, CouchDB, AuthorizationBehavior } from '@mkeen/rxcouch';
-import { Observer, Observable, BehaviorSubject, combineLatest, zip } from 'rxjs';
+import { Observer, Observable, BehaviorSubject, Subject } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { environment } from './../environments/environment';
 import { CouchDBUserContext, CouchDBBasicResponse, CouchDBDocument } from '@mkeen/rxcouch/dist/types';
@@ -13,35 +13,41 @@ export class LoginService {
   public usernamePassword: BehaviorSubject<CouchDBCredentials | null> = new BehaviorSubject(null);
   public loggedInUser: BehaviorSubject<CouchDBDocument | null> = new BehaviorSubject(null);
   public checkedWithServer: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
   public sessionInfo: BehaviorSubject<CouchDBUserContext | null> = new BehaviorSubject(null);
-
+  private couchAuth: Subject<CouchDBCredentials> = new Subject();
   private baseCouchConfig = {
     host: environment.couchHost,
     port: environment.couchPort,
     ssl: environment.couchSsl
-  }
-
-  private couchAuth: Observable<CouchDBCredentials>;
+  };
 
   public couches = {
-    _users: new CouchDB(Object.assign(this.baseCouchConfig, { dbName: '_users', trackChanges: false }), AuthorizationBehavior.cookie, this.couchAuth),
-    user_profiles: new CouchDB(Object.assign(this.baseCouchConfig, { dbName: 'user_profiles', trackChanges: true }), AuthorizationBehavior.cookie, this.couchAuth)
-  }
+    _users: new CouchDB(
+      Object.assign(this.baseCouchConfig, {
+        dbName: '_users',
+        trackChanges: false
+      }
+
+    ), AuthorizationBehavior.cookie, this.couchAuth),
+
+    user_profiles: new CouchDB(
+      Object.assign(this.baseCouchConfig, {
+        dbName: 'user_profiles',
+        trackChanges: true
+      }
+
+    ), AuthorizationBehavior.cookie, this.couchAuth)
+  };
 
   constructor(
     private cookieService: CookieService,
   ) {
-    this.couchAuth = Observable
-      .create((observer: Observer<CouchDBCredentials>): void => {
-        this.usernamePassword
-          .pipe(take(1), filter(currentAuthState => currentAuthState !== null))
-          .subscribe((couchDBAuth: CouchDBCredentials) => {
-            console.log("got", couchDBAuth);
-            observer.next(couchDBAuth);
-          });
-
-      });
+    this.usernamePassword.pipe(
+      filter(currentAuthState => !!currentAuthState)
+    ).subscribe((usernamePassword: CouchDBCredentials) => {
+      console.log("got", usernamePassword, this.couchAuth);
+      this.couchAuth.next(usernamePassword);
+    });
 
     this.couches._users.loginAttemptMade.pipe(
       filter(attemptMade => !!attemptMade),
@@ -77,11 +83,13 @@ export class LoginService {
 
       });
 
-    this.couches._users.getSession()
-      .pipe(take(1))
-      .subscribe((session) => {
-        this.sessionInfo.next(session.userCtx);
+    this.couches._users.context
+      .subscribe((context) => {
+        this.sessionInfo.next(context);
       });
+
+    this.couches._users.getSession()
+      .subscribe(_c => _c);
 
   }
 
