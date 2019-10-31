@@ -47,7 +47,7 @@
                  (focus)="highlightCredit()"
                  (blur)="resetCredit()" />
         </div>
-        <div class="field extra">
+        <div class="field extra nomarg">
           <div class="col">
             <label for="in_cc_code">
               Security Code
@@ -182,7 +182,7 @@
 
     <p>We send out periodic communications to our members using email and text messages. Your private information, including your real name will always be kept completely confidential and will not be shared with anyone, for any reason whatsoever.</p>
 
-    <div class="shouldleave" [class.bye]="personalInfoSubmitted | async" [ngSwitch]="personalInformationSubmitting | async">
+    <div class="shouldleave" [class.bye]="screen === 2" [ngSwitch]="personalInformationSubmitting | async">
       <button *ngSwitchCase="false" class="button" type="submit">Next</button>
       <div *ngSwitchCase="true" class="spinner"></div>
     </div>

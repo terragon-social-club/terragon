@@ -49,7 +49,7 @@ section {
   }
 
   .bottom {
-    overflow: auto;
+    overflow: hidden;
     position: relative;
     user-select: none;
     height: 598px;
@@ -99,14 +99,13 @@ section {
 
     &.invite_highlight {
       .contribution {
-        @include transform(scale(1.2) translateX(40%));
-        transform-origin: top left;
+        @include transform(scale(1.2) translateX(45%) translateY(20%));
       }
 
       .form {
-        @include transform(scale(.8) translateX(-60%));
+        @include transform(scale(.8) translateX(-85%));
         @include filter(blur(2px));
-        opacity: .2;
+        opacity: .1;
         pointer-events: none;
       }
 
@@ -118,14 +117,14 @@ section {
 
     &.credit_highlight {
       .contribution {
-        @include transform(scale(.8) translateX(60%));
+        @include transform(scale(.8) translateX(80%));
         @include filter(blur(2px));
-        opacity: .2;
+        opacity: .1;
         pointer-events: none;
       }
 
       .form {
-        @include transform(scale(1.1) translateX(-60%));
+        @include transform(scale(1.1) translateX(-65%));
         transform-origin: top left;
       }
 
@@ -172,6 +171,11 @@ section {
 
     &.extra {
       margin-bottom: 20px;
+
+      &.nomarg {
+        margin-bottom: 0;
+      }
+
     }
 
     &.overflow {
