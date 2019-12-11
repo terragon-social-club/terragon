@@ -88,7 +88,7 @@ export class LoginService {
         this.sessionInfo.next(context);
       });
 
-    this.couches._users.getSession()
+    this.couches._users.session()
       .subscribe(_c => _c);
 
   }

@@ -18,7 +18,7 @@ import { HomeComponent } from './home/home.component';
 import { CookieService } from 'ngx-cookie-service';
 import { ModalComponent } from './modal/modal/modal.component';
 import { ModalService } from './modal/modal.service';
-
+import { WindowFocusService } from './windowfocus.service';
 import { WebcamModule } from 'ngx-webcam';
 
 @NgModule({
@@ -40,9 +40,9 @@ import { WebcamModule } from 'ngx-webcam';
     AppRoutingModule,
     PlyrModule,
     FormsModule,
-    WebcamModule
+    WebcamModule,
   ],
-  providers: [LoginService, CookieService, ModalService],
+  providers: [LoginService, CookieService, ModalService, WindowFocusService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

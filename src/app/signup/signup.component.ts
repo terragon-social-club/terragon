@@ -1,11 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ApiService } from './../api.service';
-import { Subject, BehaviorSubject, zip } from 'rxjs';
+import { Subject, BehaviorSubject, forkJoin } from 'rxjs';
 import { tap, filter, takeUntil } from 'rxjs/operators';
 import { LoginService } from '../login.service';
-import { HttpResponseWithHeaders } from '@mkeen/rxhttp';
-import { CouchDBUserContext } from '@mkeen/rxcouch/dist/types';
+import { WindowFocusService } from '../windowfocus.service';
 
 @Component({
   selector: 'app-signup',
@@ -43,13 +42,13 @@ export class SignupComponent implements OnInit {
   });
 
   creditCardForm = {
-    cc_name: "",
-    cc_number: "",
-    cc_exp_month: "",
-    cc_exp_year: "",
-    cc_zip: "",
-    contribution: 20
-  }
+    cc_name: '',
+    cc_number: '',
+    cc_exp_month: '',
+    cc_exp_year: '',
+    cc_zipcode: '',
+    cc_terms_agree: false
+  };
 
   invitationCode = '';
 
@@ -62,9 +61,29 @@ export class SignupComponent implements OnInit {
   inviteHighlight: BehaviorSubject<boolean> = new BehaviorSubject(false);
   creditHighlight: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
+  INVITE_HIGHLIGHT = 0;
+  CREDIT_HIGHLIGHT = 1;
+
+  highlights = forkJoin([this.inviteHighlight, this.creditHighlight]);
+
   creditHighlightBlurTimeout = null;
 
-  constructor(private apiService: ApiService, private loginService: LoginService) { }
+  constructor(
+    private apiService: ApiService,
+    private loginService: LoginService,
+    private windowFocusService: WindowFocusService
+  ) { }
+
+  creditCardInfoEmpty() {
+    const { cc_name, cc_number, cc_exp_month, cc_exp_year, cc_zipcode, cc_terms_agree } = this.creditCardForm;
+
+    return cc_name === '' &&
+      cc_number === '' &&
+      cc_exp_month === '' &&
+      cc_exp_year === '' &&
+      cc_zipcode === '' &&
+      cc_terms_agree === false;
+  }
 
   validateUsername(username: any) {
     if (!(typeof username === 'string')) {
@@ -175,40 +194,52 @@ export class SignupComponent implements OnInit {
   }
 
   highlightInvite() {
-    this.creditHighlight.next(false);
-    this.inviteHighlight.next(true);
+    if (this.windowFocusService.windowFocus.value) {
+      this.creditHighlight.next(false);
+      this.inviteHighlight.next(true);
+    }
+
   }
 
   resetInvite() {
-    this.inviteHighlight.next(false);
+    if (this.windowFocusService.windowFocus.value) {
+      this.inviteHighlight.next(false);
+    }
+
   }
 
   highlightCredit() {
-    if (this.creditHighlightBlurTimeout) {
-      clearTimeout(this.creditHighlightBlurTimeout);
+    if (this.windowFocusService.windowFocus.value) {
+      if (this.creditHighlightBlurTimeout) {
+        clearTimeout(this.creditHighlightBlurTimeout);
+      }
+
+      this.inviteHighlight.next(false);
+      this.creditHighlight.next(true);
     }
-    this.inviteHighlight.next(false);
-    this.creditHighlight.next(true);
+
   }
 
   resetCredit() {
-    this.creditHighlightBlurTimeout = setTimeout(() => {
-      this.creditHighlight.next(false);
-    }, 100);
+    if (this.windowFocusService.windowFocus.value && this.creditCardInfoEmpty()) {
+      this.creditHighlightBlurTimeout = setTimeout(() => {
+        this.creditHighlight.next(false);
+      }, 100);
+
+    }
 
   }
 
   submitCC() {
-    console.log(this.loginService.loggedInUser.value);
     this.apiService.postRequest(`user/org.couchdb.user:${this.loginService.loggedInUser.value.name}/payment`, JSON.stringify(
       this.creditCardForm
     )).fetch()
       .subscribe(
         (formSubmissionResult: any) => {
           this.ccInformationSubmitting.next(false);
-          console.log(formSubmissionResult);
         }
-      )
+
+      );
 
   }
 
@@ -258,7 +289,8 @@ export class SignupComponent implements OnInit {
             } else {
               // Success
               this.loginService.couches._users.authenticated.next(true);
-              this.loginService.sessionInfo.next(formSubmissionResult);
+              this.loginService.sessionInfo.next(formSubmissionResult[0]);
+              this.loginService.loggedInUser.next(formSubmissionResult[1]);
               this.unsubscribeFromUsernameField.next(true);
             }
 
@@ -279,27 +311,4 @@ export class SignupComponent implements OnInit {
     this.rawUsername.next(downcased);
   }
 
-  contributionUp() {
-    if (this.creditCardForm.contribution < 50) {
-      this.creditCardForm.contribution += 5;
-    } else {
-      if (this.creditCardForm.contribution < 250) {
-        this.creditCardForm.contribution += 50;
-      } else {
-        this.creditCardForm.contribution += 250;
-      }
-    }
-  }
-
-  contributionDown() {
-    if (this.creditCardForm.contribution < 101) {
-      this.creditCardForm.contribution -= 1;
-    } else {
-      if (this.creditCardForm.contribution < 1001) {
-        this.creditCardForm.contribution -= 10;
-      } else {
-        this.creditCardForm.contribution -= 100;
-      }
-    }
-  }
 }

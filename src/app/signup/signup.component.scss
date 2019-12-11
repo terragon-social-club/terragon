@@ -51,8 +51,11 @@ section {
   .bottom {
     overflow: hidden;
     position: relative;
-    user-select: none;
     height: 598px;
+
+    p, h3, span, div {
+      @include disable-select();
+    }
 
     h3 {
       text-align: left;
@@ -63,11 +66,11 @@ section {
     }
     
     .contribution {
+      @include transition(all, .25s);
       float: left;
       width: 45%;
       position: relative;
       height: 100%;
-      @include transition(all, .25s);
 
       p {
         text-align: left;
@@ -77,11 +80,11 @@ section {
     }
 
     .or {
+      @include transition(all, .25s);
       float: left;
       position: relative;
       width: 10%;
       height: 400px;
-      @include transition(all, .25s);
       line-height: 365px;
       text-align: center;
       font-family: 'Lily Script One', cursive;
@@ -90,11 +93,77 @@ section {
     }
 
     .form {
+      @include transition(all, .25s);
       float: left;
       position: relative;
       width: 45%;
-      @include transition(all, .25s);
       overflow: visible;
+      
+      .total {
+        margin: 25px 0 0 0;
+        padding-top: 25px;
+        text-align: left;
+        white-space: nowrap;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+        span {
+          &:first-child {
+            font-size: 1em;
+            margin-bottom: 10px;
+
+            &:after {
+              content: " ";
+              display: inline-block;
+              position: relative;
+              width: 130px;
+              top: 3px;
+              margin: 0 10px 0 10px;
+              border-bottom: 1px dotted rgba(0, 0, 0, 0.2);
+              @include transition(width, .25s);
+            }
+
+          }
+          
+          &:last-child {
+            font-size: 1.2em;
+            opacity: .9;
+          }
+
+        }
+
+      }
+
+    }
+
+    .finish {
+      @include transform(translateY(-100px));
+      @include transition(all, .25s);
+      position: relative;
+      overflow: visible;
+      margin: 25px 0 0 0;
+      opacity: 0;
+
+      label {
+        margin: 0;
+        padding: 0;
+        font-size: .88em;
+        display: block;
+        clear: both;
+        position: absolute;
+        padding-left: 10px;
+        top: -.1em;
+        left: 10px;
+        line-height: 1.3em;
+      }
+
+      input {
+        position: relative;
+        display: block;
+        margin: 0;
+        float: none;
+        clear: both;
+      }
+
     }
 
     &.invite_highlight {
@@ -126,10 +195,20 @@ section {
       .form {
         @include transform(scale(1.1) translateX(-65%));
         transform-origin: top left;
+
+        .total span:first-child:after{
+          width: 171px;
+        }
+
       }
 
       .or {
         opacity: 0;
+      }
+
+      .finish {
+        @include transform(translateY(0));
+        opacity: 1;
       }
 
     }
@@ -422,6 +501,8 @@ section {
   }
   
   form {
+    @include transition(all, .25s);
+
     padding: 40px;
     background: rgba(255,255,255,.8);
     border-radius: 7px;
@@ -430,7 +511,17 @@ section {
     box-shadow: 0px 20px 56px 6px rgba(0,0,0,0.1);
     text-align: center;
     overflow: hidden;
+
     //min-height: 100%;
+    &#signupForm {
+      &.deemph {
+        -webkit-box-shadow: 0px 20px 56px 6px rgba(0,0,0,0.15);
+        -moz-box-shadow: 0px 20px 56px 6px rgba(0,0,0,0.15);
+        box-shadow: 0px 20px 56px 6px rgba(0,0,0,0.15);
+      }
+
+    }
+
 
     .buttonHolder {
       position: relative;

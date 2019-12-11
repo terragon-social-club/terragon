@@ -1,6 +1,6 @@
 <section *ngIf="(this.screen | async) as screen" class="screenContainer">
   <ng-container *ngIf="loginService.checkedWithServer | async">
-  <h2>
+    <h2>
     Become a Founding Member
     <img src="/assets/betsyross.svg" />
   </h2>
@@ -49,10 +49,11 @@
         </div>
         <div class="field extra nomarg">
           <div class="col">
-            <label for="in_cc_code">
-              Security Code
+            <label for="in_zip_code">
+              Zip Code
             </label>
-            <input id="in_cc_code" name="cc_code" type="text"
+            <input [(ngModel)]="creditCardForm.cc_zipcode"
+            id="in_zip_code" name="cc_code" type="text"
             (focus)="highlightCredit()"
             (blur)="resetCredit()" />
           </div>
@@ -103,6 +104,14 @@
             </select>
           </div>
         </div>
+        <div class="total">
+          <span>Annual Fee</span>
+          <span>$100</span>
+        </div>
+        <div class="finish">
+          <input (click)="highlightCredit()" (blur)="resetCredit()" [(ngModel)]="creditCardForm.cc_terms_agree" type="checkbox" id="cc_terms_agree" name="agree_terms" />
+          <label for="cc_terms_agree">I agree to pay the above total amount according to the card issuer agreement.</label>
+        </div>
       </div>
     </div>
     
@@ -117,6 +126,8 @@
         [class.submitted]="screen === 2"
         [class.submitting]="personalInformationSubmitting | async"
         #signupForm="ngForm"
+        id="signupForm"
+        [class.deemph]="(inviteHighlight | async) || (creditHighlight | async)"
         (ngSubmit)="submitPersonal(signupForm)">
     <div [class.errorVisible]="formErrors.person_name.show" class="field name">
       <div class="error">
