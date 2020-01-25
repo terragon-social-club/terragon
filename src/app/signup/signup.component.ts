@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ApiService } from './../api.service';
 import { Subject, BehaviorSubject, forkJoin } from 'rxjs';
-import { tap, filter, takeUntil } from 'rxjs/operators';
+import { tap, filter, takeUntil, take } from 'rxjs/operators';
 import { LoginService } from '../login.service';
 import { WindowFocusService } from '../windowfocus.service';
 
@@ -71,7 +72,8 @@ export class SignupComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private loginService: LoginService,
-    private windowFocusService: WindowFocusService
+    private windowFocusService: WindowFocusService,
+    private router: Router
   ) { }
 
   creditCardInfoEmpty() {
@@ -179,11 +181,31 @@ export class SignupComponent implements OnInit {
       .subscribe((authState: boolean) => {
         console.log('state changed', authState);
         if (authState) {
-          this.screen.next(2);
-          this.personalInformationSubmitting.next(false);
-          if (!this.personalInfoSubmitted.value === false) {
-            this.personalInfoSubmitted.next(true);
-          }
+          this.loginService.loggedInUser.pipe(
+            filter(loggedInUser => !!loggedInUser),
+            take(1)
+          ).subscribe((loggedInUser) => {
+            console.log("logged in as ", loggedInUser)
+            this.loginService.couches.user_profiles.doc(loggedInUser._id)
+            .pipe(take(1))
+            .subscribe((profileInfo) => {
+              console.log("got", profileInfo)
+              if(profileInfo.roles.includes('pending_member')) {
+                this.screen.next(2);
+                this.personalInformationSubmitting.next(false);
+                if (!this.personalInfoSubmitted.value === false) {
+                  this.personalInfoSubmitted.next(true);
+                }
+
+              } else {
+                console.log("nav out")
+                this.router.navigateByUrl('/');
+                return;
+              }
+
+            });
+
+          });
 
         } else {
           this.screen.next(1);
@@ -202,7 +224,7 @@ export class SignupComponent implements OnInit {
   }
 
   resetInvite() {
-    if (this.windowFocusService.windowFocus.value) {
+    if (this.windowFocusService.windowFocus.value && !this.invitationCode.length) {
       this.inviteHighlight.next(false);
     }
 
@@ -231,15 +253,31 @@ export class SignupComponent implements OnInit {
   }
 
   submitCC() {
-    this.apiService.postRequest(`user/org.couchdb.user:${this.loginService.loggedInUser.value.name}/payment`, JSON.stringify(
-      this.creditCardForm
-    )).fetch()
-      .subscribe(
-        (formSubmissionResult: any) => {
-          this.ccInformationSubmitting.next(false);
-        }
+    if (!this.inviteHighlight.value) {
+      this.ccInformationSubmitting.next(true);
+      this.apiService.postRequest(`user/org.couchdb.user:${this.loginService.sessionInfo.value.name}/payment`, JSON.stringify(
+        this.creditCardForm
+      )).fetch()
+        .subscribe(
+          (formSubmissionResult: any) => {
+            this.ccInformationSubmitting.next(false);
+          }
 
-      );
+        );
+
+    } else {
+      this.ccInformationSubmitting.next(true);
+      this.apiService.postRequest(`user/org.couchdb.user:${this.loginService.sessionInfo.value.name}/invite`, JSON.stringify(
+        { invite_code: this.invitationCode }
+      )).fetch()
+        .subscribe(
+          (formSubmissionResult: any) => {
+            this.ccInformationSubmitting.next(false);
+          }
+
+        );
+
+    }
 
   }
 
@@ -247,7 +285,6 @@ export class SignupComponent implements OnInit {
     if (!this.personalInfoSubmitted.value && !this.personalInformationSubmitting.value) {
       let currentMap = Object.assign({}, this.formSubmissionErrors.value);
       Object.keys(currentMap).map((fieldNameIndex) => {
-        console.log(fieldNameIndex);
         currentMap[fieldNameIndex].show = false;
       });
 
@@ -297,7 +334,11 @@ export class SignupComponent implements OnInit {
           },
 
           (error) => {
-            console.log('error', error);
+            setTimeout(() => {
+              alert('Signup failed. Please try again.');
+              this.personalInformationSubmitting.next(false);
+            }, 2000);
+
           }
 
         );

@@ -15,15 +15,11 @@ header {
     height: 38px;
     overflow: hidden;
     text-decoration: none;
-    background: white;
+    background: rgba(255,255,255,.5);
     width: 120px;
     padding: 4px 15px 15px 15px;
     border-bottom-right-radius: 7px;
     border-bottom-left-radius: 7px;
-    transition: all .2s;
-    border-bottom: 4px solid #1B4353;
-    border-left: 4px solid #1B4353;
-    border-right: 4px solid #1B4353;
     box-shadow: 0px -16px 147px 34px rgba(0,0,0,0.1);
     position: relative;
 
@@ -43,11 +39,11 @@ header {
       transition: all .2s;
     }
     
-    span.social-club, svg {
+    svg {
       opacity: 0;
     }
     
-    &:hover, &.logoOpen {
+    @media screen and (min-width: 1530px) {
       box-shadow: 0px -16px 147px 34px rgba(0,0,0,0.2);
       height: 175px;
 

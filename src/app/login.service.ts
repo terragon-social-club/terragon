@@ -64,16 +64,17 @@ export class LoginService {
         } else {
           if (sessionInfo.name !== null) {
             if (this.loggedInUser.value === null) {
+              console.log(sessionInfo, "seshInfo");
               this.couches.user_profiles.doc(sessionInfo.name).subscribe((profile) => {
                 console.log("got profiles", profile);
-                this.couches.user_profiles.documents.add(profile);
+                //this.couches.user_profiles.documents.add(profile);
                 this.loggedInUser.next(profile);
               });
 
             }
 
+            // Need an entry here for each non-user database
             if (!this.couches.user_profiles.authenticated.value) {
-              // Need an entry here for each non-user database
               this.couches.user_profiles.authenticated.next(true);
             }
 

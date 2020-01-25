@@ -16,7 +16,7 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loginService.loggedInUser.subscribe((authed) => {
+    /*this.loginService.loggedInUser.subscribe((authed) => {
       if (!authed) {
         this.router.navigateByUrl('/');
         return;
@@ -28,7 +28,7 @@ export class ProfileComponent implements OnInit {
         this.router.navigateByUrl('/');
       }
 
-    })
+    })*/
   }
 
   logout() {

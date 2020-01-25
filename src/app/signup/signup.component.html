@@ -14,12 +14,12 @@
           (ngSubmit)="submitCC()">
     <fieldset [disabled]="screen !== 2">
     <p class="copy first">
-      As a founding member, you will get a spiffy badge next to your name, access to exclusive content, and lifetime access to Terragon.
+      As a founding member, you will get a spiffy badge next to your name, access to exclusive content, and an invite code to share.
     </p>
     <div class="bottom" [class.invite_highlight]="inviteHighlight | async" [class.credit_highlight]="creditHighlight | async">
       <div class="contribution">
         <h3>Invitation Code</h3>
-        <p>If you&rsquo;ve got an invitation code, you can join for free!</p>
+        <p>If you&rsquo;ve got an invitation code, this year is on us!</p>
         <div class="field">
           <input [(ngModel)]="invitationCode"
                  id="in_invitation_code" name="invitation_code" type="text" 

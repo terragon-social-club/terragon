@@ -7,8 +7,8 @@ import { environment } from './../environments/environment';
 })
 export class ApiService {
   private prefix = 'http';
-  private host = 'localhost';
-  private port = 3000
+  private host = environment.couchHost;
+  private port;
 
   constructor() {
     if (environment.couchSsl) {
@@ -17,10 +17,12 @@ export class ApiService {
 
     if (environment.couchHost !== 'localhost') {
       this.host = 'api.terragon.us';
+    } else {
+      this.port = 3000;
     }
 
     if (this.prefix === 'https') {
-      this.port === 443;
+      this.port = 443;
     }
 
   }
