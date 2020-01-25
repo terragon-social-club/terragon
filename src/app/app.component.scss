@@ -6,6 +6,11 @@ section {
   max-width: 1500px;
   min-height: 100%;
 
+  #content_main {
+    min-height: 100%;
+    position: relative;
+  }
+
   masthead {
     position: fixed;
     top: 0;

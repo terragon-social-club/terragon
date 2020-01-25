@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../login.service';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -8,6 +9,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+
+  hotFeed: BehaviorSubject<any> = this.loginService.couches.feeds.doc('hot');
 
   constructor(
     private loginService: LoginService,
@@ -23,7 +26,8 @@ export class HomeComponent implements OnInit {
 
       }
 
-    })
+    });
+    
   }
 
 }

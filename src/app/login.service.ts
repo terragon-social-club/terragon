@@ -36,7 +36,15 @@ export class LoginService {
         trackChanges: true
       }
 
-    ), AuthorizationBehavior.cookie, this.couchAuth)
+    ), AuthorizationBehavior.cookie, this.couchAuth),
+
+    feeds: new CouchDB(
+      Object.assign(this.baseCouchConfig, {
+        dbName: 'feeds',
+        trackChanges: true
+      }
+
+    ), AuthorizationBehavior.open, this.couchAuth)
   };
 
   constructor(
@@ -76,6 +84,10 @@ export class LoginService {
             // Need an entry here for each non-user database
             if (!this.couches.user_profiles.authenticated.value) {
               this.couches.user_profiles.authenticated.next(true);
+            }
+
+            if (!this.couches.feeds.authenticated.value) {
+              this.couches.feeds.authenticated.next(true);
             }
 
           }
