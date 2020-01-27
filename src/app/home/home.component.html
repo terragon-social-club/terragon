@@ -2,7 +2,7 @@
   <section id="hot" class="area">
     <h3><img src="/assets/fire.svg" /> HOT</h3>
     <ol *ngIf="hotFeed | async let feed">
-      <li *ngFor="let link of feed.links"><span *ngIf="link.badges && link.badges.length" class="badge streaming">{{ link.badges[0] }}</span><a href="{{ link.url }}">{{ link.title }}</a></li>
+      <li *ngFor="let link of feed.links"><span *ngIf="link.badges && link.badges.length" class="badge streaming">{{ link.badges[0] }}</span><a routerLink="/conversations/{{link.slug}}">{{ link.title }}</a></li>
     </ol>
   </section>
   <section id="poll" class="area">

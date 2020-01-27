@@ -15,7 +15,7 @@ export class ApiService {
       this.prefix = 'https';
     }
 
-    if (environment.couchHost !== 'localhost') {
+    if (environment.couchHost !== '10.0.0.115') {
       this.host = 'api.terragon.us';
     } else {
       this.port = 3000;

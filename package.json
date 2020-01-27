@@ -1,6 +1,6 @@
 {
-  "name": "terragon",
-  "version": "0.0.0",
+  "name": "@terragon/terragon",
+  "version": "0.0.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -9,7 +9,6 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^8.2.14",
     "@angular/common": "^8.2.14",

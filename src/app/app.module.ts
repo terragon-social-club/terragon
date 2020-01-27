@@ -20,6 +20,7 @@ import { ModalComponent } from './modal/modal/modal.component';
 import { ModalService } from './modal/modal.service';
 import { WindowFocusService } from './windowfocus.service';
 import { WebcamModule } from 'ngx-webcam';
+import { ConversationsComponent } from './conversations/conversations.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { WebcamModule } from 'ngx-webcam';
     ProfileComponent,
     FooterComponent,
     HomeComponent,
-    ModalComponent
+    ModalComponent,
+    ConversationsComponent
   ],
   imports: [
     BrowserModule,

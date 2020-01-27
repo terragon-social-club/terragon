@@ -20,15 +20,19 @@ header {
     padding: 4px 15px 15px 15px;
     border-bottom-right-radius: 7px;
     border-bottom-left-radius: 7px;
-    box-shadow: 0px -16px 147px 34px rgba(0,0,0,0.1);
+    box-shadow: 0px -16px 147px 34px rgba(0,0,0,0.2);
     position: relative;
 
     @media screen and (max-width: 1530px) {
       left: -40px;
     }
 
-    @media screen and (max-width: 875px) {
+    @media screen and (max-width: 900px) {
       left: 0;
+    }
+
+    @media screen and (max-width: 810px) {
+      left: 28px;
     }
     
     span.terragon {
@@ -222,7 +226,15 @@ header {
       @media screen and (max-width: 1530px) {
         position: absolute;
         top: -10px;
-        left: 129px;
+        right: -40px;
+      }
+
+      @media screen and (max-width: 900px) {
+        right: 0;
+      }
+  
+      @media screen and (max-width: 810px) {
+        right: 20px;
       }
 
       img {

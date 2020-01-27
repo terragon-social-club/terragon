@@ -44,7 +44,31 @@ export class LoginService {
         trackChanges: true
       }
 
-    ), AuthorizationBehavior.open, this.couchAuth)
+    ), AuthorizationBehavior.open, this.couchAuth),
+
+    comments: new CouchDB(
+      Object.assign(this.baseCouchConfig, {
+        dbName: 'comments',
+        trackChanges: true
+      }
+
+    ), AuthorizationBehavior.cookie, this.couchAuth),
+
+    commentsIngress: new CouchDB(
+      Object.assign(this.baseCouchConfig, {
+        dbName: 'ingress_comments',
+        trackChanges: false
+      }
+
+    ), AuthorizationBehavior.cookie, this.couchAuth),
+
+    commentsReactionsIngress: new CouchDB(
+      Object.assign(this.baseCouchConfig, {
+        dbName: 'ingress_reactions',
+        trackChanges: false
+      }
+
+    ), AuthorizationBehavior.cookie, this.couchAuth)
   };
 
   constructor(
@@ -88,6 +112,10 @@ export class LoginService {
 
             if (!this.couches.feeds.authenticated.value) {
               this.couches.feeds.authenticated.next(true);
+            }
+
+            if (!this.couches.comments.authenticated.value) {
+              this.couches.comments.authenticated.next(true);
             }
 
           }

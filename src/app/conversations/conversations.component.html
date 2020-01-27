@@ -1,0 +1,42 @@
+<div class="posts" *ngIf="conversation | async let conversation">
+  <h3>{{ conversation.title }}</h3>
+  <img class="preview" src="{{ conversation.image }}" />
+  <a href="{{ conversation.url }}">{{ conversation.url }}</a>
+
+  <div class="messages">
+    <ul>
+      <li (mouseover)="focusComment(commentIndex)" (mouseout)="unfocusComment()" [class]="comment.sender_id === loggedInUser.value._id ? focusedComment === commentIndex ? 'focused me' : 'me' : focusedComment === commentIndex ? 'focused them' : 'them'" *ngFor="let comment of conversation.comments; index as commentIndex; trackBy: trackByFn">
+        <div *ngIf="comment.sender_id != loggedInUser.value._id" class="menu">
+          <div (click)="reaction(commentIndex, 'loveface')" (touchstart)="reaction(commentIndex, 'loveface')" (mouseover)="previewReaction(commentIndex, 'loveface')" (mouseout)="unpreviewReaction(commentIndex, 'loveface')" [class]="previewReactions['loveface'][commentIndex] ? 'preview item' : 'item'">
+            <img src="/assets/reactions/loveface.svg" />
+            <div class="tooltip">{{ comment.reactions.loveface }}</div>
+          </div>
+          <div (click)="reaction(commentIndex, 'lol')" (touchstart)="reaction(commentIndex, 'lol')" (mouseover)="previewReaction(commentIndex, 'lol')" (mouseout)="unpreviewReaction(commentIndex, 'lol')" [class]="previewReactions['lol'][commentIndex] ? 'preview item' : 'item'">
+            <img src="/assets/reactions/lol.svg" />
+            <div class="tooltip">{{ comment.reactions.lol }}</div>
+          </div>
+          <div (click)="reaction(commentIndex, 'smile')" (touchstart)="reaction(commentIndex, 'smile')" (mouseover)="previewReaction(commentIndex, 'smile')" (mouseout)="unpreviewReaction(commentIndex, 'smile')" [class]="previewReactions['smile'][commentIndex] ? 'preview item' : 'item'">
+            <img src="/assets/reactions/smile.svg" />
+            <div class="tooltip">{{ comment.reactions.smile }}</div>
+          </div>
+          <div (click)="reaction(commentIndex, 'sad')" (touchstart)="reaction(commentIndex, 'sad')" (mouseover)="previewReaction(commentIndex, 'sad')" (mouseout)="unpreviewReaction(commentIndex, 'sad')" [class]="previewReactions['sad'][commentIndex] ? 'preview item' : 'item'">
+            <img src="/assets/reactions/sad.svg" />
+            <div class="tooltip">{{ comment.reactions.sad }}</div>
+          </div>
+          <div (click)="reaction(commentIndex, 'angry')" (touchstart)="reaction(commentIndex, 'angry');" (mouseover)="previewReaction(commentIndex, 'angry')" (mouseout)="unpreviewReaction(commentIndex, 'angry')" [class]="previewReactions['angry'][commentIndex] ? 'preview item' : 'item'">
+            <img src="/assets/reactions/angry.svg" (contextmenu)="$event.preventDefault();" />
+            <div class="tooltip">{{ comment.reactions.angry }}</div>
+          </div>
+        </div>
+        <img class="profile" src="/assets/thomas-jefferson.svg" />
+        <div class="bubble">
+          {{ comment.content }}
+        </div>
+      </li>
+    </ul>
+    <form class="cloud" (ngSubmit)="send()">
+      <input placeholder="Write a comment here, and make it interesting!" type="text" name="message" [(ngModel)]="messageInput" />
+    </form>
+    
+  </div>
+</div>

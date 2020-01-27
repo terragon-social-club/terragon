@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  couchHost: 'localhost',
+  couchHost: '10.0.0.115',
   couchPort: 5984,
   couchSsl: false
 };
