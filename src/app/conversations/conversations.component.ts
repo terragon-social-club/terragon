@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoginService } from '../login.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { CouchDBDocument } from '@mkeen/rxcouch';
 
 @Component({
@@ -10,7 +10,7 @@ import { CouchDBDocument } from '@mkeen/rxcouch';
   templateUrl: './conversations.component.html',
   styleUrls: ['./conversations.component.scss']
 })
-export class ConversationsComponent implements OnInit {
+export class ConversationsComponent implements OnInit, OnDestroy {
   constructor(
     private loginService: LoginService,
     private route: ActivatedRoute
@@ -30,7 +30,7 @@ export class ConversationsComponent implements OnInit {
     lol: [],
     smile: [],
     sad: [],
-    angry: [] 
+    angry: []
   };
 
   focusedComment = -1;
@@ -41,18 +41,26 @@ export class ConversationsComponent implements OnInit {
 
   messageInput = '';
 
+  componentUnloaded: Subject<boolean> = new Subject();
+
   ngOnInit() {
-    this.route.params.subscribe((params) => {
+    this.loginService.couches.comments.reconfigure({trackChanges: true});
+    this.route.params.pipe(takeUntil(this.componentUnloaded)).subscribe((params) => {
       if (this.documentSubscription) {
         this.documentSubscription.unsubscribe();
       }
 
-      this.documentSubscription = this.loginService.couches.comments.doc(params.conversationId).subscribe(
+      this.loginService.couches.comments.doc(params.conversationId).pipe(takeUntil(this.componentUnloaded)).subscribe(
         conversation => this.conversation.next(conversation)
       );
 
     });
 
+  }
+
+  ngOnDestroy() {
+    this.componentUnloaded.next(true);
+    this.loginService.couches.comments.reconfigure({trackChanges: false});
   }
 
   send() {

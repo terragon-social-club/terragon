@@ -24,10 +24,10 @@ export class MastheadComponent implements OnInit {
       .pipe(filter(val => !!val))
       .subscribe(loggedInUser => {
         console.log("felf", loggedInUser);
-        this.loginService.couches.user_profiles.doc(loggedInUser._id)
-          .subscribe((user) => {
-            this.loggedInUserProfile.next(user);
-          });
+        this.loginService.couches.user_profiles.doc(loggedInUser._id).subscribe((user) => {
+          this.loggedInUserProfile.next(user);
+        });
+
       });
 
   }

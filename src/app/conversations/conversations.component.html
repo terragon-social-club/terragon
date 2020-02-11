@@ -5,8 +5,8 @@
 
   <div class="messages">
     <ul>
-      <li (mouseover)="focusComment(commentIndex)" (mouseout)="unfocusComment()" [class]="comment.sender_id === loggedInUser.value._id ? focusedComment === commentIndex ? 'focused me' : 'me' : focusedComment === commentIndex ? 'focused them' : 'them'" *ngFor="let comment of conversation.comments; index as commentIndex; trackBy: trackByFn">
-        <div *ngIf="comment.sender_id != loggedInUser.value._id" class="menu">
+      <li (mouseover)="focusComment(commentIndex)" (mouseout)="unfocusComment()" [class]="(loggedInUser.value && comment.sender_id === loggedInUser.value._id) ? focusedComment === commentIndex ? 'focused me' : 'me' : focusedComment === commentIndex ? 'focused them' : 'them'" *ngFor="let comment of conversation.comments; index as commentIndex; trackBy: trackByFn">
+        <div *ngIf="loggedInUser.value && comment.sender_id != loggedInUser.value._id" class="menu">
           <div (click)="reaction(commentIndex, 'loveface')" (touchstart)="reaction(commentIndex, 'loveface')" (mouseover)="previewReaction(commentIndex, 'loveface')" (mouseout)="unpreviewReaction(commentIndex, 'loveface')" [class]="previewReactions['loveface'][commentIndex] ? 'preview item' : 'item'">
             <img src="/assets/reactions/loveface.svg" />
             <div class="tooltip">{{ comment.reactions.loveface }}</div>

@@ -177,7 +177,7 @@ export class SignupComponent implements OnInit {
 
       });
 
-    this.loginService.couches._users.authenticated
+    this.loginService.couchSession.authenticated
       .subscribe((authState: boolean) => {
         console.log('state changed', authState);
         if (authState) {
@@ -325,7 +325,7 @@ export class SignupComponent implements OnInit {
 
             } else {
               // Success
-              this.loginService.couches._users.authenticated.next(true);
+              this.loginService.couchSession.authenticated.next(true);
               this.loginService.sessionInfo.next(formSubmissionResult[0]);
               this.loginService.loggedInUser.next(formSubmissionResult[1]);
               this.unsubscribeFromUsernameField.next(true);

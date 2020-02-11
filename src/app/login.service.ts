@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CouchDBCredentials, CouchDB, AuthorizationBehavior } from '@mkeen/rxcouch';
+import { CouchSession, CouchDBCredentials, CouchDB, AuthorizationBehavior } from '@mkeen/rxcouch';
 import { Observer, Observable, BehaviorSubject, Subject } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { environment } from './../environments/environment';
@@ -21,6 +21,12 @@ export class LoginService {
     ssl: environment.couchSsl
   };
 
+  public couchSession: CouchSession = new CouchSession(
+    AuthorizationBehavior.cookie,
+    `${this.baseCouchConfig.ssl ? 'https://' : 'http://'}${this.baseCouchConfig.host}:${this.baseCouchConfig.port}/_session`,
+    this.couchAuth
+  )
+
   public couches = {
     _users: new CouchDB(
       Object.assign(this.baseCouchConfig, {
@@ -28,7 +34,7 @@ export class LoginService {
         trackChanges: false
       }
 
-    ), AuthorizationBehavior.cookie, this.couchAuth),
+    ), this.couchSession),
 
     user_profiles: new CouchDB(
       Object.assign(this.baseCouchConfig, {
@@ -36,7 +42,7 @@ export class LoginService {
         trackChanges: true
       }
 
-    ), AuthorizationBehavior.cookie, this.couchAuth),
+    ), this.couchSession),
 
     feeds: new CouchDB(
       Object.assign(this.baseCouchConfig, {
@@ -44,7 +50,7 @@ export class LoginService {
         trackChanges: true
       }
 
-    ), AuthorizationBehavior.open, this.couchAuth),
+    ), this.couchSession),
 
     comments: new CouchDB(
       Object.assign(this.baseCouchConfig, {
@@ -52,7 +58,7 @@ export class LoginService {
         trackChanges: true
       }
 
-    ), AuthorizationBehavior.cookie, this.couchAuth),
+    ), this.couchSession),
 
     commentsIngress: new CouchDB(
       Object.assign(this.baseCouchConfig, {
@@ -60,7 +66,7 @@ export class LoginService {
         trackChanges: false
       }
 
-    ), AuthorizationBehavior.cookie, this.couchAuth),
+    ), this.couchSession),
 
     commentsReactionsIngress: new CouchDB(
       Object.assign(this.baseCouchConfig, {
@@ -68,7 +74,15 @@ export class LoginService {
         trackChanges: false
       }
 
-    ), AuthorizationBehavior.cookie, this.couchAuth)
+    ), this.couchSession),
+
+    hotClicksFeed: new CouchDB(
+      Object.assign(this.baseCouchConfig, {
+        dbName: 'feed_hotclicks',
+        trackChanges: false
+      }
+
+    ), this.couchSession)
   };
 
   constructor(
@@ -77,11 +91,10 @@ export class LoginService {
     this.usernamePassword.pipe(
       filter(currentAuthState => !!currentAuthState)
     ).subscribe((usernamePassword: CouchDBCredentials) => {
-      console.log("got", usernamePassword, this.couchAuth);
       this.couchAuth.next(usernamePassword);
     });
 
-    this.couches._users.loginAttemptMade.pipe(
+    this.couchSession.loginAttemptMade.pipe(
       filter(attemptMade => !!attemptMade),
       take(1)
     ).subscribe((_attemptMade) => {
@@ -105,47 +118,26 @@ export class LoginService {
 
             }
 
-            // Need an entry here for each non-user database
-            if (!this.couches.user_profiles.authenticated.value) {
-              this.couches.user_profiles.authenticated.next(true);
-            }
-
-            if (!this.couches.feeds.authenticated.value) {
-              this.couches.feeds.authenticated.next(true);
-            }
-
-            if (!this.couches.comments.authenticated.value) {
-              this.couches.comments.authenticated.next(true);
-            }
-
           }
 
         }
 
       });
 
-    this.couches._users.context
+    this.couchSession.context
       .subscribe((context) => {
         this.sessionInfo.next(context);
       });
 
-    this.couches._users.session()
+    this.couchSession.get()
       .subscribe(_c => _c);
 
-  }
-
-  receivedAuthCookie() {
-    Object.keys(this.couches).map((couchIdx) => {
-      if (!this.couches[couchIdx].authenticated.value) {
-        this.couches[couchIdx].authenticated.next(true);
-      }
-    })
   }
 
   endSession() {
     return Observable
       .create((observer: Observer<CouchDBBasicResponse>): void => {
-        this.couches._users.destroySession()
+        this.couchSession.destroy()
           .pipe(take(1))
           .subscribe((response: CouchDBBasicResponse) => {
             this.sessionInfo.next(null);

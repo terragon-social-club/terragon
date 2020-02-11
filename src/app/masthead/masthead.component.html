@@ -11,14 +11,15 @@
       <span>{{loggedInUser._id}}</span>
       <div *ngFor="let badge of loggedInUser.roles" class="badge">{{badge}}</div>
     </a>
-  </ng-container>  
-  
+  </ng-container>
+
   <ng-template #loggedOut>
+    <a class="members" [routerLink]="['signin']">Members</a>
   </ng-template>
 
   <!--
   <div id="linksout">
-  
+
   <a class="external" id="github" href="https://github.com/terragon-social-club" target="_blank">
     <svg viewBox="-0.2 -1 379 334">
     <path id="puddle" fill="#9CDAF1" d="m296.94 295.43c0 20.533-47.56 37.176-106.22 37.176-58.67 0-106.23-16.643-106.23-37.176s47.558-37.18 106.23-37.18c58.66 0 106.22 16.65 106.22 37.18z"/>

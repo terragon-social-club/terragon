@@ -21,6 +21,8 @@ import { ModalService } from './modal/modal.service';
 import { WindowFocusService } from './windowfocus.service';
 import { WebcamModule } from 'ngx-webcam';
 import { ConversationsComponent } from './conversations/conversations.component';
+import { ChangesService } from './data/changes.service';
+import { LinkboardComponent } from './massive/linkboard/linkboard.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,8 @@ import { ConversationsComponent } from './conversations/conversations.component'
     FooterComponent,
     HomeComponent,
     ModalComponent,
-    ConversationsComponent
+    ConversationsComponent,
+    LinkboardComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +47,7 @@ import { ConversationsComponent } from './conversations/conversations.component'
     FormsModule,
     WebcamModule,
   ],
-  providers: [LoginService, CookieService, ModalService, WindowFocusService],
+  providers: [LoginService, CookieService, ModalService, WindowFocusService, ChangesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

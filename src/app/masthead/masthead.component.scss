@@ -1,3 +1,7 @@
+a.members {
+  position: absolute;
+}
+
 header {
   padding: 0 0 0 20px;
   height: 100%;
@@ -9,7 +13,7 @@ header {
     padding: 0;
     margin: 0 auto 20px auto;
   }
-  
+
   #logo {
     display: block;
     height: 38px;
@@ -34,62 +38,62 @@ header {
     @media screen and (max-width: 810px) {
       left: 28px;
     }
-    
+
     span.terragon {
-      
+
     }
 
     span, svg {
       transition: all .2s;
     }
-    
+
     svg {
       opacity: 0;
     }
-    
+
     @media screen and (min-width: 1530px) {
       box-shadow: 0px -16px 147px 34px rgba(0,0,0,0.2);
       height: 175px;
 
       span.terragon {
-        
+
       }
-      
+
       span.social-club, svg {
         opacity: 1;
       }
-      
+
     }
 
     span {
       font-family: 'Lily Script One', cursive;
       display: block;
       color: #1B4353;
-      
+
 
       &.terragon {
         font-size: 24pt;
         margin: 0 0 -5px 0;
       }
-      
+
       &.social-club {
         margin: -10px 0 0 0;
         font-size: 19pt;
       }
-      
+
     }
-    
+
     svg {
       display: block;
       width: 120px;
       height: 120px;
       fill: #1B4353;
     }
-    
+
   }
 
   a#existingMembers {
-    
+
   }
 
   #linksout {
@@ -102,19 +106,19 @@ header {
       bottom: auto;
     }
 
-    
+
     @media screen and (max-width: 875px) {
       right: 0;
     }
-    
+
   }
-  
+
   a.external, a.internal {
     font-family: 'Varela Round', sans-serif;
     position: relative;
     display: block;
     cursor: pointer;
-    
+
     svg {
       display: inline-block;
       opacity: .44;
@@ -144,9 +148,9 @@ header {
       svg {
         opacity: 1;
       }
-      
+
     }
-    
+
   }
 
   .external {
@@ -158,7 +162,7 @@ header {
       display: inline-block !important;
       margin-left: 20px;
     }
-    
+
     svg {
       width: 25px;
     }
@@ -170,7 +174,7 @@ header {
       position: relative;
       left: 0 !important;
     }
-    
+
   }
 
   .internal {
@@ -207,14 +211,14 @@ header {
           left: 3px;
           opacity: .4;
         }
-        
+
       }
-      
+
       span {
         left: 0;
       }
     }
-    
+
     &#profile {
       padding-left: 44px;
       padding-top: 0;
@@ -232,7 +236,7 @@ header {
       @media screen and (max-width: 900px) {
         right: 0;
       }
-  
+
       @media screen and (max-width: 810px) {
         right: 20px;
       }
@@ -246,7 +250,7 @@ header {
         position: absolute;
         opacity: .96;
       }
-      
+
       span {
         display: block;
         left: 0;
@@ -259,19 +263,19 @@ header {
           top: 15px;
           left: 15px;
         }
-        
+
       }
 
       &:hover {
         span {
           text-decoration: none;
         }
-        
+
         img {
           opacity: 1;
         }
       }
-      
+
     }
 
     &.active1 {
@@ -279,9 +283,9 @@ header {
         text-decoration: underline;
         opacity: 1;
       }
-      
+
     }
-    
+
     &.active {
       background: linear-gradient(90deg, rgba(255,255,255,0.3225665266106442) 0%, rgba(255,255,255,0.34217436974789917) 77%, rgba(255,255,255,0) 100%);
       border-top-left-radius: 10px;
@@ -298,15 +302,14 @@ header {
       }
 
     }
-    
+
     svg {
       opacity: 1;
       left: 10px !important;
       top: 5px !important;
       width: 42px;
     }
-    
+
   }
 
 }
-
