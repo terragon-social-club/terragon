@@ -4,8 +4,7 @@
     <ol *ngIf="hotFeed | async let feed">
       <li *ngFor="let link of feed.links; index as linkIndex">
         <span *ngIf="link.badges && link.badges.length" class="badge streaming">{{ link.badges.join(' ') }}</span>
-        <a (click)="registerClick(linkIndex)" routerLink="/conversations/{{link.slug}}">
-          {{ link.title }}
+        <a (click)="registerClick(linkIndex)" routerLink="/conversations/{{link.slug}}">{{ link.title }}
           <div class="clicks">
             <span *ngFor="let click of clicks[linkIndex]; trackBy: trackByFn" [style.top]="click.y" [style.left]="click.x"></span>
           </div>

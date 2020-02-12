@@ -20,14 +20,14 @@
       margin: 0 0 5px 0;
       padding: 0;
       font-weight: bold;
-  
+
       img {
         width: 24px;
         position: relative;
         display: inline-block;
         top: 4px;
       }
-  
+
     }
 
     &#hot {
@@ -93,7 +93,7 @@
       }
 
     }
-  
+
   }
 
 }
@@ -134,7 +134,7 @@ img.preview {
       margin-bottom: 24px;
       padding: 1px 0 4px 0;
     }
-    
+
   }
 
   li {
@@ -148,17 +148,17 @@ img.preview {
     }
 
     &.me .bubble {
-      color:white; 
+      color:white;
       background:#0B93F6;
       align-self: flex-end;
-        
+
       &:before {
         right:-7px;
         border-right:20px solid #0B93F6;
         border-bottom-left-radius: 16px 14px;
         transform:translate(0, -2px);
       }
-    
+
       &:after {
         right:-56px;
         width:26px;
@@ -172,14 +172,14 @@ img.preview {
     &.them .bubble {
       background:#E5E5EA;
       color:black;
-        
+
       &:before {
         left:-7px;
         border-left:20px solid #E5E5EA;
         border-bottom-right-radius: 16px 14px;
         transform:translate(0, -2px);
       }
-    
+
       &:after {
         left:4px;
         width:26px;
@@ -211,11 +211,15 @@ img.preview {
       font-size: 12px;
       top: 6px;
       z-index: 2;
-      display: none;
+      display: block;
 
       .item {
         display: inline-block;
         position: relative;
+
+        .reactions {
+          position: absolute;
+        }
 
         .tooltip {
           position: absolute;
@@ -230,19 +234,20 @@ img.preview {
 
         &.preview {
           .tooltip {
-            display: inline-block;
+            //display: inline-block;
           }
 
         }
 
         img {
           display: block;
+          opacity: 0;
           height: 16px;
           margin-left: 2px;
           transition: transform .2s;
           cursor: pointer;
           position: relative;
-  
+
           &:hover {
             transform: scale(2.2);
             z-index: 1;
@@ -255,9 +260,24 @@ img.preview {
 
         }
 
+        .reactions {
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+
+        .reactions img {
+          opacity: 1;
+          position: absolute;
+          top: 0;
+          left: 0;
+          animation: reactionBubble 1s;
+          -webkit-animation-fill-mode: forwards;
+        }
+
       }
 
-      
+
 
       span {
 
@@ -266,8 +286,8 @@ img.preview {
     }
 
     &.focused {
-      .menu {
-        display: block;
+      .menu .item img {
+        opacity: 1;
       }
     }
 
@@ -282,7 +302,7 @@ img.preview {
     padding:5px 15px;
     border-radius:25px;
     font-size: .9em;
-    
+
     &:before, &:after {
       content:"";
       position:absolute;

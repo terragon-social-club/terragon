@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoginService } from '../login.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil, tap } from 'rxjs/operators';
 import { CouchDBDocument } from '@mkeen/rxcouch';
 
 @Component({
@@ -34,14 +34,13 @@ export class ConversationsComponent implements OnInit, OnDestroy {
   };
 
   focusedComment = -1;
-
   loggedInUser = this.loginService.loggedInUser;
-
   documentSubscription: Subscription;
-
   messageInput = '';
-
   componentUnloaded: Subject<boolean> = new Subject();
+  emoteIndicators: any[] = [];
+
+  lastKnownEmoteCounts: any[] = [];
 
   ngOnInit() {
     this.loginService.couches.comments.reconfigure({trackChanges: true});
@@ -50,7 +49,25 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         this.documentSubscription.unsubscribe();
       }
 
-      this.loginService.couches.comments.doc(params.conversationId).pipe(takeUntil(this.componentUnloaded)).subscribe(
+      this.loginService.couches.comments.doc(params.conversationId).pipe(takeUntil(this.componentUnloaded), tap((conversation) => {
+        conversation.comments.forEach((comment, index) => {
+          if (this.lastKnownEmoteCounts[index] === undefined) {
+            this.lastKnownEmoteCounts[index] = comment.reactions;
+          } else {
+            Object.keys(comment.reactions).forEach((reactionTypeName) => {
+              const indicatorCount = comment.reactions[reactionTypeName] - this.lastKnownEmoteCounts[index][reactionTypeName];
+              if(indicatorCount > 0) {
+                this.reactionIndicate(index, reactionTypeName);
+              }
+
+            });
+
+            this.lastKnownEmoteCounts[index] = comment.reactions;
+          }
+
+        });
+
+      })).subscribe(
         conversation => this.conversation.next(conversation)
       );
 
@@ -74,13 +91,35 @@ export class ConversationsComponent implements OnInit, OnDestroy {
 
   }
 
+  reactionIndicate(commentIndex: number, reactionType: string) {
+    if (this.emoteIndicators[commentIndex] === undefined) {
+      this.emoteIndicators[commentIndex] = {
+        loveface: 0,
+        lol: 0,
+        smile: 0,
+        sad: 0,
+        angry: 0
+      }
+
+    }
+
+    this.emoteIndicators[commentIndex][reactionType]++;
+
+
+
+  }
+
+  makeArray(length: number) {
+    return new Array(length);
+  }
+
   reaction(commentIndex: number, reactionType: string) {
     this.loginService.couches.commentsReactionsIngress.doc({
       conversation_id: this.conversation.value._id,
       commentIndex,
       reactionType
     }).pipe(take(1)).subscribe((result) => {
-      console.log(result);
+
     });
 
   }
@@ -93,7 +132,11 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     delete this.previewReactions[reactionType][commentIndex];
   }
 
-  focusComment(commentIndex: number) {
+  focusComment(commentIndex: number, isSameUser?: boolean) {
+    if (isSameUser) {
+      return true;
+    }
+
     this.focusedComment = commentIndex;
   }
 
@@ -102,7 +145,11 @@ export class ConversationsComponent implements OnInit, OnDestroy {
   }
 
   trackByFn(index, item) {
-    return index; // or item.id
+    if(item) {
+      return item.sender_id + index;
+    } else {
+      return index;
+    }
   }
 
 }
