@@ -1,9 +1,10 @@
 {
   "name": "@terragon/terragon",
-  "version": "0.0.2",
+  "version": "0.0.3",
+  "description": "A front end masterpiece",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host 10.0.0.115",
+    "start": "ng serve --host 127.0.0.1",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
