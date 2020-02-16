@@ -9,7 +9,6 @@ import { TickerComponent } from './masthead/ticker/ticker.component';
 import { WatermarkComponent } from './watermark/watermark.component';
 import { HeroComponent } from './hero/hero.component';
 import { SignupComponent } from './signup/signup.component';
-import { PlyrModule } from 'ngx-plyr';
 import { LoginService } from './login.service';
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -43,7 +42,6 @@ import { LinkboardComponent } from './massive/linkboard/linkboard.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    PlyrModule,
     FormsModule,
     WebcamModule,
   ],

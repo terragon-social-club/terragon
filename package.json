@@ -1,12 +1,12 @@
 {
   "name": "@terragon/terragon",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "description": "A front end masterpiece",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build-prod": "npm run build --aot=true --prod",
+    "build-prod": "npm run build --aot=true --prod --configuration=production",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -20,14 +20,12 @@
     "@angular/platform-browser": "^8.2.14",
     "@angular/platform-browser-dynamic": "^8.2.14",
     "@angular/router": "^8.2.14",
-    "@mkeen/rxcouch": "^4.0.1",
-    "@mkeen/rxhttp": "^1.11.111",
+    "@mkeen/rxcouch": "^4.1.0",
+    "@mkeen/rxhttp": "^1.12.2",
     "@nguniversal/express-engine": "^8.2.6",
     "compass-mixins": "^0.12.10",
     "ngx-cookie-service": "^2.3.0",
-    "ngx-plyr": "^1.2.2",
     "ngx-webcam": "^0.2.6",
-    "plyr": "^3.5.6",
     "rxjs": "^6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
@@ -37,7 +35,7 @@
     "@angular/cli": "^8.3.25",
     "@angular/compiler-cli": "^8.2.14",
     "@angular/language-service": "^8.2.14",
-    "@types/jasmine": "^3.5.3",
+    "@types/jasmine": "^3.5.4",
     "@types/jasminewd2": "^2.0.8",
     "@types/node": "~8.9.4",
     "codelyzer": "^5.2.1",
@@ -52,5 +50,14 @@
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
     "typescript": "~3.4.3"
+  },
+  "browser": {
+    "crypto": false,
+    "fs": false,
+    "path": false,
+    "os": false,
+    "net": false,
+    "stream": false,
+    "tls": false
   }
 }
