@@ -16,7 +16,7 @@ export class ApiService {
     }
 
     if (environment.couchHost !== '10.0.0.115') {
-      this.host = 'api.terragon.us';
+      this.host = 'express.terragon.us';
     } else {
       this.port = 3000;
     }

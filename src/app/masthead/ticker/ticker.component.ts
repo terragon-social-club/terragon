@@ -7,10 +7,10 @@ import { Subject } from 'rxjs';
   styleUrls: ['./ticker.component.scss']
 })
 export class TickerComponent implements OnInit {
-  private currentHeadline: Subject<string> = new Subject();
-  private displayText: string = 'Tracy is the sexiest girl';
-  private cancelOut: boolean = false;
-  private repainting: boolean = false;
+  public currentHeadline: Subject<string> = new Subject();
+  public displayText: string = 'Tracy is the sexiest girl';
+  public cancelOut: boolean = false;
+  public repainting: boolean = false;
 
   constructor() {
     this.currentHeadline.subscribe((text: string) => {

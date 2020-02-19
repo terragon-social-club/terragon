@@ -7,39 +7,39 @@
     <ul>
       <li (mouseover)="focusComment(commentIndex, comment.sender_id === loggedInUser.value._id)" (mouseout)="unfocusComment()" [class]="(loggedInUser.value && comment.sender_id === loggedInUser.value._id) ? focusedComment === commentIndex ? 'focused me' : 'me' : focusedComment === commentIndex ? 'focused them' : 'them'" *ngFor="let comment of conversation.comments; index as commentIndex; trackBy: trackByFn">
         <div class="menu">
-          <div (click)="reaction(commentIndex, 'loveface')" (touchstart)="reaction(commentIndex, 'loveface')" (mouseover)="previewReaction(commentIndex, 'loveface')" (mouseout)="unpreviewReaction(commentIndex, 'loveface')" [class]="previewReactions['loveface'][commentIndex] ? 'preview item' : 'item'">
-            <img src="/assets/reactions/loveface.svg" />
+          <div (click)="reaction(commentIndex, 'loveface')" (mouseover)="previewReaction(commentIndex, 'loveface')" (mouseout)="unpreviewReaction(commentIndex, 'loveface')" [class]="previewReactions['loveface'][commentIndex] ? 'preview item' : 'item'">
+            <img class="usable" src="/assets/reactions/loveface.svg" (contextmenu)="$event.preventDefault();" />
             <div class="tooltip">{{ comment.reactions.loveface }}</div>
             <div class="reactions" *ngIf="emoteIndicators[commentIndex] let emoteIndexIndicators">
-              <img [id]="imageIndex + 'loveface'" src="/assets/reactions/loveface.svg" *ngFor="let image of makeArray(emoteIndexIndicators.loveface); index as imageIndex; trackBy: trackByFn" />
+              <img [id]="commentIndex + imageIndex + 'loveface'" src="/assets/reactions/loveface.svg" *ngFor="let image of makeArray(emoteIndexIndicators.loveface); index as imageIndex; trackBy: trackByFn" />
             </div>
           </div>
-          <div (click)="reaction(commentIndex, 'lol')" (touchstart)="reaction(commentIndex, 'lol')" (mouseover)="previewReaction(commentIndex, 'lol')" (mouseout)="unpreviewReaction(commentIndex, 'lol')" [class]="previewReactions['lol'][commentIndex] ? 'preview item' : 'item'">
-            <img src="/assets/reactions/lol.svg" />
+          <div (click)="reaction(commentIndex, 'lol')" (mouseover)="previewReaction(commentIndex, 'lol')" (mouseout)="unpreviewReaction(commentIndex, 'lol')" [class]="previewReactions['lol'][commentIndex] ? 'preview item' : 'item'">
+            <img class="usable" src="/assets/reactions/lol.svg" (contextmenu)="$event.preventDefault();" />
             <div class="tooltip">{{ comment.reactions.lol }}</div>
             <div class="reactions" *ngIf="emoteIndicators[commentIndex] let emoteIndexIndicators">
-              <img [id]="imageIndex + 'lol'" src="/assets/reactions/lol.svg" *ngFor="let image of makeArray(emoteIndexIndicators.lol); index as imageIndex; trackBy: trackByFn" />
+              <img [id]="commentIndex + imageIndex + 'lol'" src="/assets/reactions/lol.svg" *ngFor="let image of makeArray(emoteIndexIndicators.lol); index as imageIndex; trackBy: trackByFn" />
             </div>
           </div>
-          <div (click)="reaction(commentIndex, 'smile')" (touchstart)="reaction(commentIndex, 'smile')" (mouseover)="previewReaction(commentIndex, 'smile')" (mouseout)="unpreviewReaction(commentIndex, 'smile')" [class]="previewReactions['smile'][commentIndex] ? 'preview item' : 'item'">
-            <img src="/assets/reactions/smile.svg" />
+          <div (click)="reaction(commentIndex, 'smile')" (mouseover)="previewReaction(commentIndex, 'smile')" (mouseout)="unpreviewReaction(commentIndex, 'smile')" [class]="previewReactions['smile'][commentIndex] ? 'preview item' : 'item'">
+            <img class="usable" src="/assets/reactions/smile.svg" (contextmenu)="$event.preventDefault();" />
             <div class="tooltip">{{ comment.reactions.smile }}</div>
             <div class="reactions" *ngIf="emoteIndicators[commentIndex] let emoteIndexIndicators">
-              <img [id]="imageIndex + 'smile'" src="/assets/reactions/smile.svg" *ngFor="let image of makeArray(emoteIndexIndicators.smile); index as imageIndex; trackBy: trackByFn" />
+              <img [id]="commentIndex + imageIndex + 'smile'" src="/assets/reactions/smile.svg" *ngFor="let image of makeArray(emoteIndexIndicators.smile); index as imageIndex; trackBy: trackByFn" />
             </div>
           </div>
-          <div (click)="reaction(commentIndex, 'sad')" (touchstart)="reaction(commentIndex, 'sad')" (mouseover)="previewReaction(commentIndex, 'sad')" (mouseout)="unpreviewReaction(commentIndex, 'sad')" [class]="previewReactions['sad'][commentIndex] ? 'preview item' : 'item'">
-            <img src="/assets/reactions/sad.svg" />
+          <div (click)="reaction(commentIndex, 'sad')" (mouseover)="previewReaction(commentIndex, 'sad')" (mouseout)="unpreviewReaction(commentIndex, 'sad')" [class]="previewReactions['sad'][commentIndex] ? 'preview item' : 'item'">
+            <img class="usable" src="/assets/reactions/sad.svg" (contextmenu)="$event.preventDefault();" />
             <div class="tooltip">{{ comment.reactions.sad }}</div>
             <div class="reactions" *ngIf="emoteIndicators[commentIndex] let emoteIndexIndicators">
-              <img [id]="imageIndex + 'sad'" src="/assets/reactions/sad.svg" *ngFor="let image of makeArray(emoteIndexIndicators.sad); index as imageIndex; trackBy: trackByFn" />
+              <img [id]="commentIndex + imageIndex + 'sad'" src="/assets/reactions/sad.svg" *ngFor="let image of makeArray(emoteIndexIndicators.sad); index as imageIndex; trackBy: trackByFn" />
             </div>
           </div>
-          <div (click)="reaction(commentIndex, 'angry')" (touchstart)="reaction(commentIndex, 'angry');" (mouseover)="previewReaction(commentIndex, 'angry')" (mouseout)="unpreviewReaction(commentIndex, 'angry')" [class]="previewReactions['angry'][commentIndex] ? 'preview item' : 'item'">
-            <img src="/assets/reactions/angry.svg" (contextmenu)="$event.preventDefault();" />
+          <div (click)="reaction(commentIndex, 'angry')" (mouseover)="previewReaction(commentIndex, 'angry')" (mouseout)="unpreviewReaction(commentIndex, 'angry')" [class]="previewReactions['angry'][commentIndex] ? 'preview item' : 'item'">
+            <img class="usable" src="/assets/reactions/angry.svg" (contextmenu)="$event.preventDefault();" />
             <div class="tooltip">{{ comment.reactions.angry }}</div>
             <div class="reactions" *ngIf="emoteIndicators[commentIndex] let emoteIndexIndicators">
-              <img [id]="imageIndex + 'angry'" src="/assets/reactions/angry.svg" *ngFor="let image of makeArray(emoteIndexIndicators.angry); index as imageIndex; trackBy: trackByFn" />
+              <img [id]="commentIndex + imageIndex + 'angry'" src="/assets/reactions/angry.svg" *ngFor="let image of makeArray(emoteIndexIndicators.angry); index as imageIndex; trackBy: trackByFn" />
             </div>
           </div>
         </div>

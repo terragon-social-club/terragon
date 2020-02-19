@@ -9,7 +9,7 @@ import { ModalService } from './modal/modal.service';
 })
 export class AppComponent implements OnInit {
   constructor(
-    private loginService: LoginService,
+    public loginService: LoginService,
     public modalService: ModalService) { }
 
   ngOnInit() { }

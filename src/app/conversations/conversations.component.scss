@@ -98,15 +98,7 @@
 
 }
 
-body {
-	font-family: "Helvetica Neue";
-	font-size: 20px;
-	font-weight: normal;
-  max-width: 450px;
-	margin: 50px auto;
-  display: flex;
-  flex-direction: column;
-}
+
 
 img.preview {
   width: 50%;
@@ -212,6 +204,7 @@ img.preview {
       top: 6px;
       z-index: 2;
       display: block;
+      user-select: none;
 
       .item {
         display: inline-block;
@@ -241,20 +234,26 @@ img.preview {
 
         img {
           display: block;
-          opacity: 0;
-          height: 16px;
-          margin-left: 2px;
+          height: 36px;
+          margin-left: 0;
+          margin-right: -15px;
+          top: -10px;
           transition: transform .2s;
           cursor: pointer;
           position: relative;
+          transform: scale(.5);
+
+          &.usable {
+            visibility: hidden;
+          }
 
           &:hover {
-            transform: scale(2.2);
+            transform: scale(1);
             z-index: 1;
           }
 
           &:active {
-            transform: scale(1.6);
+            transform: scale(.8);
             z-index: 1;
           }
 
@@ -262,17 +261,18 @@ img.preview {
 
         .reactions {
           position: absolute;
-          top: 0;
+          top: -10px;
           left: 0;
+          pointer-events: none;
         }
 
         .reactions img {
           opacity: 1;
           position: absolute;
-          top: 0;
+          bottom: 0;
           left: 0;
-          animation: reactionBubble 1s;
-          -webkit-animation-fill-mode: forwards;
+          animation: reactionBubble 1s forwards;
+          transform: scale(.2);
         }
 
       }
@@ -286,8 +286,8 @@ img.preview {
     }
 
     &.focused {
-      .menu .item img {
-        opacity: 1;
+      .menu .item img.usable {
+        visibility: visible;
       }
     }
 

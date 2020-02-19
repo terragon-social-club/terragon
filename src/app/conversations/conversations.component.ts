@@ -105,8 +105,6 @@ export class ConversationsComponent implements OnInit, OnDestroy {
 
     this.emoteIndicators[commentIndex][reactionType]++;
 
-
-
   }
 
   makeArray(length: number) {
@@ -150,6 +148,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     } else {
       return index;
     }
+
   }
 
 }
